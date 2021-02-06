@@ -58,7 +58,7 @@ const mocks = {
 
 const resolvers: Resolvers = {
     Query: {
-        // TODO: need to define type of Response query from bitquery.io
+        // TODO [#2]: need to define type of Response query from bitquery.io
         // 
         // Raw response can be found in https://explorer.bitquery.io/graphql/Sr4ksApTAT
         // It should be define in types.ts
