@@ -1,7 +1,10 @@
 import { ApolloServer, MockList, gql } from 'apollo-server';
-import { Resolvers } from './types';
+import { Resolvers } from './generated.types';
 import { bitQueryClient } from './apollo/client';
 import { TRACKING_BALANCE } from './apollo/queries';
+import { getCoinsFromCoinGecko, getPriceByCoinGeckoId } from './coinGecko';
+
+let coinIdByName: any = {};
 
 const typeDefs = gql`
     type Query {
@@ -39,22 +42,22 @@ const typeDefs = gql`
     }
 `;
 
-const mocks = {
-    User: () => ({
-        id: () => '0x13f15A0Cf049d75800D22DA32fEE09A2612F8Faf',
-        balances: () => new MockList([2, 6]),
-    }),
+// const mocks = {
+//     User: () => ({
+//         id: () => '0x13f15A0Cf049d75800D22DA32fEE09A2612F8Faf',
+//         balances: () => new MockList([2, 6]),
+//     }),
 
-    Currency: () => ({
-        id: () => '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
-        address: () => '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
-        name: () => 'Pancake',
-        symbol: () => 'CAKE',
-        price: () => '2.6',
-        value: () => '20.123131221',
-        symbolUrl: () => 'https://raw.githubusercontent.com/pancakeswap/pancake-frontend/develop/public/images/cake.svg'
-    }),
-}
+//     Currency: () => ({
+//         id: () => '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
+//         address: () => '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
+//         name: () => 'Pancake',
+//         symbol: () => 'CAKE',
+//         price: () => '2.6',
+//         value: () => '20.123131221',
+//         symbolUrl: () => 'https://raw.githubusercontent.com/pancakeswap/pancake-frontend/develop/public/images/cake.svg'
+//     }),
+// }
 
 const resolvers: Resolvers = {
     Query: {
@@ -86,7 +89,13 @@ const resolvers: Resolvers = {
                     };
                 }),
             };
-        }
+        },
+    },
+
+    Currency: {
+        price: async (parent) => {
+            return await getPriceByCoinGeckoId(coinIdByName[parent.symbol.toLowerCase()]); 
+        },
     },
 }
 
@@ -98,6 +107,12 @@ const server = new ApolloServer({
 });
 
 server.listen({ port: process.env.PORT || 4000 }).then(async () => {
+    const coins = await getCoinsFromCoinGecko();
+
+    coins.forEach(coin => {
+        coinIdByName[coin.symbol] = coin.id;
+    });
+
     console.log(`
         🚀  Server is running!
         🔉  Listening on port 4000

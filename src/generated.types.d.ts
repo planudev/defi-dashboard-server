@@ -11,6 +11,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
 
@@ -40,13 +41,15 @@ export type Currency = {
   /** Currency's address */
   id: Scalars['ID'];
   /** Currency's address */
-  address?: Maybe<Scalars['String']>;
+  address: Scalars['String'];
   /** Currency's name e.g. Ethereum, Pancake */
   name: Scalars['String'];
   /** Currency's symbol e.g. ETH, BNB, CAKE */
   symbol: Scalars['String'];
+  /** Currency's decimal */
+  decimals: Scalars['Int'];
   /** Currency's price per token */
-  price: Scalars['String'];
+  price?: Maybe<Scalars['String']>;
   /** Amount of token that user have */
   value: Scalars['String'];
   /** Currency's type 'ERC20' */
@@ -145,9 +148,9 @@ export type ResolversTypes = ResolversObject<{
   User: ResolverTypeWrapper<User>;
   Currency: ResolverTypeWrapper<Currency>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   CacheControlScope: CacheControlScope;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 }>;
 
@@ -158,8 +161,8 @@ export type ResolversParentTypes = ResolversObject<{
   User: User;
   Currency: Currency;
   String: Scalars['String'];
-  Upload: Scalars['Upload'];
   Int: Scalars['Int'];
+  Upload: Scalars['Upload'];
   Boolean: Scalars['Boolean'];
 }>;
 
@@ -180,10 +183,11 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type CurrencyResolvers<ContextType = any, ParentType extends ResolversParentTypes['Currency'] = ResolversParentTypes['Currency']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   symbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  price?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  decimals?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  price?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tokenType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   symbolUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
