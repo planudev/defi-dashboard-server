@@ -55,7 +55,7 @@ export type Currency = {
   /** Currency's type 'ERC20' */
   tokenType?: Maybe<Scalars['String']>;
   /** Currency's logo */
-  symbolUrl?: Maybe<Scalars['String']>;
+  logoURI?: Maybe<Scalars['String']>;
 };
 
 export enum CacheControlScope {
@@ -190,7 +190,7 @@ export type CurrencyResolvers<ContextType = any, ParentType extends ResolversPar
   price?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tokenType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  symbolUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  logoURI?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

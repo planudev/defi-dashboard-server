@@ -1,10 +1,9 @@
 import { ApolloServer, MockList, gql } from 'apollo-server';
+import { DataSources } from "apollo-server-core/dist/graphqlOptions";
 import { Resolvers } from './generated.types';
 import { bitQueryClient } from './apollo/client';
 import { TRACKING_BALANCE } from './apollo/queries';
-import { getCoinsFromCoinGecko, getPriceByCoinGeckoId } from './coinGecko';
-
-let coinIdByName: any = {};
+import { CoinGeckoAPI } from './datasources/coingecko';
 
 const typeDefs = gql`
     type Query {
@@ -38,7 +37,7 @@ const typeDefs = gql`
         "Currency's type 'ERC20'"
         tokenType: String
         "Currency's logo"
-        symbolUrl: String
+        logoURI: String
     }
 `;
 
@@ -93,26 +92,39 @@ const resolvers: Resolvers = {
     },
 
     Currency: {
-        price: async (parent) => {
-            return await getPriceByCoinGeckoId(coinIdByName[parent.symbol.toLowerCase()]); 
+        price: async (parent, args, { dataSources }) => {
+            return dataSources.coingeckoAPI.getPrice(parent.symbol);
         },
+
+        // logoURI: (parent: Currency) => {
+        //     console.log(parent.symbol.toUpperCase());
+        //     console.log(Object.keys(coinGeckoTokenLists.tokens).includes(parent.symbol.toUpperCase()));
+        //     if (!(Object.keys(coinGeckoTokenLists.tokens).includes(parent.symbol.toUpperCase()))) {
+        //         return '';
+        //     }
+
+        //     return coinGeckoTokenLists.tokens[parent.symbol.toUpperCase()].logoURI;
+        // }
     },
+}
+
+type IDataSources = {
+    coingeckoAPI: CoinGeckoAPI;
+}
+
+const dataSources: DataSources<IDataSources> = {
+    coingeckoAPI: new CoinGeckoAPI(),
 }
 
 const server = new ApolloServer({
     typeDefs, 
     resolvers,
+    dataSources: () => dataSources,
     introspection: true,
     playground: true,
 });
 
 server.listen({ port: process.env.PORT || 4000 }).then(async () => {
-    const coins = await getCoinsFromCoinGecko();
-
-    coins.forEach(coin => {
-        coinIdByName[coin.symbol] = coin.id;
-    });
-
     console.log(`
         🚀  Server is running!
         🔉  Listening on port 4000
