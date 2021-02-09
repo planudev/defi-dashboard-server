@@ -1,5 +1,3 @@
-import { F } from "lodash/fp";
-
 export const memoize = (fn: any) => {
     const cache: any = {};
 
