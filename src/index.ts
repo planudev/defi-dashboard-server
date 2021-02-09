@@ -1,9 +1,10 @@
 import { ApolloServer, MockList, gql } from 'apollo-server';
 import { DataSources } from "apollo-server-core/dist/graphqlOptions";
-import { Resolvers } from './generated.types';
+import { Currency, Resolvers } from './generated.types';
 import { bitQueryClient } from './apollo/client';
 import { TRACKING_BALANCE } from './apollo/queries';
 import { CoinGeckoAPI } from './datasources/coingecko';
+import { TrustWalletAPI } from './datasources/trustwallet';
 
 const typeDefs = gql`
     type Query {
@@ -92,9 +93,17 @@ const resolvers: Resolvers = {
     },
 
     Currency: {
-        price: async (parent, args, { dataSources }) => {
+        price: async (parent: Currency, args, { dataSources }) => {
             return dataSources.coingeckoAPI.getPrice(parent.symbol);
         },
+        
+        logoURI: async (parent: Currency, args, { dataSources }) => {
+            if (parent.symbol.toUpperCase() == 'BNB') {
+                return 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png';
+            }
+
+            return dataSources.trustWalletAPI.getLogoURI(parent.symbol);
+        }
 
         // logoURI: (parent: Currency) => {
         //     console.log(parent.symbol.toUpperCase());
@@ -110,10 +119,12 @@ const resolvers: Resolvers = {
 
 type IDataSources = {
     coingeckoAPI: CoinGeckoAPI;
+    trustWalletAPI: TrustWalletAPI;
 }
 
 const dataSources: DataSources<IDataSources> = {
     coingeckoAPI: new CoinGeckoAPI(),
+    trustWalletAPI: new TrustWalletAPI(),
 }
 
 const server = new ApolloServer({

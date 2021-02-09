@@ -44,10 +44,6 @@ class CoinGeckoAPI extends RESTDataSource {
     }
 
     private async getCoinRecords(): Promise<Record<string, CoinGeckoCoin>> {
-        if (this.getCoinRecordsPromise != undefined) {
-            return await this.getCoinRecordsPromise;
-        }
-
         const coinLists: CoinGeckoCoin[] = await this.get('coins/list');
         let mappedCoinLists: Record<string, CoinGeckoCoin> = {};
 
@@ -64,7 +60,11 @@ class CoinGeckoAPI extends RESTDataSource {
     }
 
     private async refreshData(): Promise<void> {
-        this.cacheCoinListsById = await this.getCoinRecords();
+        if (this.getCoinRecordsPromise == undefined) {
+            this.getCoinRecordsPromise = this.getCoinRecords();
+        }
+
+        this.cacheCoinListsById = await this.getCoinRecordsPromise;
         this.updatedAt = Date.now();
     }
 
