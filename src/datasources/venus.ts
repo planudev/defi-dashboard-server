@@ -37,7 +37,7 @@ class VenusAPI<TContext = any> extends DataSource {
     }
 
     async getVAIMintedAmount(address: string): Promise<string> {
-        // TODO: return vai minted amount
+        // TODO [#9]: return vai minted amount
         return '0'
     }
 
