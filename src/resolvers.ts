@@ -46,6 +46,16 @@ export const resolvers: Resolvers = {
         },
     },
 
+    VenusToken: {
+        id: () => '',
+        address: () => '0x',
+        name: () => 'TAROZONE',
+        symbol: () => 'TARO',
+        decimals: () => 18,
+        price: () => '2.9',
+        value: () => '0',
+    },
+
     User: {
         
     },

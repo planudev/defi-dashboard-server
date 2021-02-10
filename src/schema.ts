@@ -61,8 +61,14 @@ export const typeDefs = gql`
         "Amount of token that user have"
         value: String!
         logoURI: String
-        annualPercentageYield: String!
-        isCollateral: Boolean!
+        isCollateral: Boolean
+        underlyingAddress: String
+        underlyingName: String
+        underlyingSymbol: String
+        borrowApy: String
+        borrowVenusApy: String
+        supplyApy: String
+        supplyVenusApy: String
     }
 
     type Venus {

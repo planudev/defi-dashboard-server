@@ -1,5 +1,15 @@
 import { DataSource } from 'apollo-datasource';
 import { VenusToken } from '../generated.types';
+import { fetch } from 'cross-fetch';
+
+type VenusTokensResponse = {
+    status: boolean;
+    data: VenusTokensResponseData;
+}
+
+type VenusTokensResponseData = {
+    markets: VenusToken[];
+}
 
 class VenusAPI<TContext = any> extends DataSource {
     constructor() {
@@ -31,14 +41,16 @@ class VenusAPI<TContext = any> extends DataSource {
         return '0'
     }
 
-    async getSupportSupplyTokens(): Promise<VenusToken[]> {
-        // TODO [#7]: return all of supported supply tokens
-        return [];
-    }
+    async getSupportTokens(): Promise<VenusToken[]> {
+        const venusAPIUri = 'https://api.venus.io/api/vtoken';
+        const response: Response = await fetch(venusAPIUri);
+        
+        if (!response.ok) {
+            throw new Error('getTokenError')
+        }
 
-    async getSupportBorrowTokens(): Promise<VenusToken[]> {
-        // TODO [#8]: return all of supported borrow tokens
-        return [];
+        const venusTokensResponse: VenusTokensResponse = await response.json();
+        return venusTokensResponse.data.markets;
     }
 }
 

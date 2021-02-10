@@ -90,8 +90,14 @@ export type VenusToken = Token & {
   /** Amount of token that user have */
   value: Scalars['String'];
   logoURI?: Maybe<Scalars['String']>;
-  annualPercentageYield: Scalars['String'];
-  isCollateral: Scalars['Boolean'];
+  isCollateral?: Maybe<Scalars['Boolean']>;
+  underlyingAddress?: Maybe<Scalars['String']>;
+  underlyingName?: Maybe<Scalars['String']>;
+  underlyingSymbol?: Maybe<Scalars['String']>;
+  borrowApy?: Maybe<Scalars['String']>;
+  borrowVenusApy?: Maybe<Scalars['String']>;
+  supplyApy?: Maybe<Scalars['String']>;
+  supplyVenusApy?: Maybe<Scalars['String']>;
 };
 
 export type Venus = {
@@ -266,8 +272,14 @@ export type VenusTokenResolvers<ContextType = any, ParentType extends ResolversP
   price?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   logoURI?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  annualPercentageYield?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  isCollateral?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isCollateral?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  underlyingAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  underlyingName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  underlyingSymbol?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  borrowApy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  borrowVenusApy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  supplyApy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  supplyVenusApy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
