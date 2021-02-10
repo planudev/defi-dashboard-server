@@ -8,12 +8,12 @@ class VenusAPI<TContext = any> extends DataSource {
 
     async getTotalSupplyBalance(address: string): Promise<string> {
         // TODO [#3]: return supply balance from venus by account
-        return '';
+        return '0';
     }
 
     async getTotalBorrowBalance(address: string): Promise<string> {
         // TODO [#4]: return borrow balance from venus by account
-        return '';
+        return '0';
     }
 
     async getSuppliedTokens(address: string): Promise<VenusToken[]> {
@@ -26,6 +26,11 @@ class VenusAPI<TContext = any> extends DataSource {
         return [];
     }
 
+    async getVAIMintedAmount(address: string): Promise<string> {
+        // TODO: return vai minted amount
+        return '0'
+    }
+
     async getSupportSupplyTokens(): Promise<VenusToken[]> {
         // TODO [#7]: return all of supported supply tokens
         return [];
@@ -36,3 +41,5 @@ class VenusAPI<TContext = any> extends DataSource {
         return [];
     }
 }
+
+export { VenusAPI };

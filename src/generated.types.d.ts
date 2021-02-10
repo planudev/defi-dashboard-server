@@ -20,11 +20,17 @@ export type Query = {
   __typename?: 'Query';
   /** Query to get user by address */
   user?: Maybe<User>;
+  venus?: Maybe<Venus>;
 };
 
 
 export type QueryUserArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryVenusArgs = {
+  address: Scalars['ID'];
 };
 
 /** User is a someone who hold the wallet */
@@ -90,9 +96,9 @@ export type VenusToken = Token & {
 
 export type Venus = {
   __typename?: 'Venus';
-  id: Scalars['ID'];
-  supplyBalance: Scalars['String'];
-  borrowBalance: Scalars['String'];
+  userAddress: Scalars['ID'];
+  totalSupplyBalance: Scalars['String'];
+  totalBorrowBalance: Scalars['String'];
   vaiMintedAmount: Scalars['String'];
   suppliedTokens: Array<Maybe<VenusToken>>;
   borrowedTokens: Array<Maybe<VenusToken>>;
@@ -219,6 +225,7 @@ export type CacheControlDirectiveResolver<Result, Parent, ContextType = any, Arg
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
+  venus?: Resolver<Maybe<ResolversTypes['Venus']>, ParentType, ContextType, RequireFields<QueryVenusArgs, 'address'>>;
 }>;
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
@@ -265,9 +272,9 @@ export type VenusTokenResolvers<ContextType = any, ParentType extends ResolversP
 }>;
 
 export type VenusResolvers<ContextType = any, ParentType extends ResolversParentTypes['Venus'] = ResolversParentTypes['Venus']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  supplyBalance?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  borrowBalance?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  userAddress?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  totalSupplyBalance?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  totalBorrowBalance?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   vaiMintedAmount?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   suppliedTokens?: Resolver<Array<Maybe<ResolversTypes['VenusToken']>>, ParentType, ContextType>;
   borrowedTokens?: Resolver<Array<Maybe<ResolversTypes['VenusToken']>>, ParentType, ContextType>;
