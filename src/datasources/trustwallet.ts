@@ -30,7 +30,7 @@ class TrustWalletAPI extends RESTDataSource {
         this.baseURL = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/'
         this.cacheMappedTokens = {};
         this.updatedAt = 0;
-        this.gapBetweenEachUpdate = 500;   
+        this.gapBetweenEachUpdate = 900;   
     }
 
     public async getLogoURI(symbol: string): Promise<string> {

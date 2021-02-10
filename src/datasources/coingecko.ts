@@ -19,7 +19,7 @@ class CoinGeckoAPI extends RESTDataSource {
         this.baseURL = 'https://api.coingecko.com/api/v3/';
         this.cacheCoinListsById = {};
         this.updatedAt = 0;
-        this.gapBetweenEachUpdate = 500;
+        this.gapBetweenEachUpdate = 900;
         this.getCoinRecordsPromise = undefined;
     }
 

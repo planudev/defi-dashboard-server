@@ -1,4 +1,4 @@
-import { ApolloServer, MockList, gql } from 'apollo-server';
+import { ApolloServer, gql } from 'apollo-server';
 import { DataSources } from "apollo-server-core/dist/graphqlOptions";
 import { Currency, Resolvers } from './generated.types';
 import { bitQueryClient } from './apollo/client';
@@ -19,8 +19,23 @@ const typeDefs = gql`
         balances: [Currency]
     }
 
+    interface Token {
+        "Token's address"
+        id: ID!
+        "Token's address"
+        address: String!
+        "Token's name e.g. Ethereum, Pancake"
+        name: String!
+        "Token's symbol e.g. ETH, BNB, CAKE"
+        symbol: String!
+        "Token's decimal"
+        decimals: Int!
+        "Token's logo"
+        logoURI: String
+    }
+
     "Currency is a token that user have with can be Native or ERC20"
-    type Currency {
+    type Currency implements Token {
         "Currency's address"
         id: ID!
         "Currency's address"
@@ -40,24 +55,30 @@ const typeDefs = gql`
         "Currency's logo"
         logoURI: String
     }
+
+    type VenusToken implements Token {
+        id: ID!
+        address: String!
+        name: String!
+        symbol: String!
+        decimals: Int!
+        price: String!
+        "Amount of token that user have"
+        value: String!
+        logoURI: String
+        annualPercentageYield: String!
+        isCollateral: Boolean!
+    }
+
+    type Venus {
+        id: ID!
+        supplyBalance: String!
+        borrowBalance: String!
+        vaiMintedAmount: String!
+        suppliedTokens: [VenusToken]!
+        borrowedTokens: [VenusToken]!
+    }
 `;
-
-// const mocks = {
-//     User: () => ({
-//         id: () => '0x13f15A0Cf049d75800D22DA32fEE09A2612F8Faf',
-//         balances: () => new MockList([2, 6]),
-//     }),
-
-//     Currency: () => ({
-//         id: () => '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
-//         address: () => '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
-//         name: () => 'Pancake',
-//         symbol: () => 'CAKE',
-//         price: () => '2.6',
-//         value: () => '20.123131221',
-//         symbolUrl: () => 'https://raw.githubusercontent.com/pancakeswap/pancake-frontend/develop/public/images/cake.svg'
-//     }),
-// }
 
 const resolvers: Resolvers = {
     Query: {
@@ -92,6 +113,12 @@ const resolvers: Resolvers = {
         },
     },
 
+    Token: {
+        __resolveType(token, context, info) {
+            return null;
+        }
+    },
+
     Currency: {
         price: async (parent: Currency, args, { dataSources }) => {
             return dataSources.coingeckoAPI.getPrice(parent.symbol);
@@ -104,16 +131,6 @@ const resolvers: Resolvers = {
 
             return dataSources.trustWalletAPI.getLogoURI(parent.symbol);
         }
-
-        // logoURI: (parent: Currency) => {
-        //     console.log(parent.symbol.toUpperCase());
-        //     console.log(Object.keys(coinGeckoTokenLists.tokens).includes(parent.symbol.toUpperCase()));
-        //     if (!(Object.keys(coinGeckoTokenLists.tokens).includes(parent.symbol.toUpperCase()))) {
-        //         return '';
-        //     }
-
-        //     return coinGeckoTokenLists.tokens[parent.symbol.toUpperCase()].logoURI;
-        // }
     },
 }
 
