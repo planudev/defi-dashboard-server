@@ -1,6 +1,8 @@
-import { Currency, Resolvers } from './generated.types';
+import { CreamToken, Currency, Resolvers } from './generated.types';
 import { bitQueryClient } from './apollo/client';
 import { TRACKING_BALANCE } from './apollo/queries';
+import { ethers } from "ethers";
+import crToken from './abis/crToken.json';
 
 export const resolvers: Resolvers = {
     Query: {
@@ -42,6 +44,13 @@ export const resolvers: Resolvers = {
                 suppliedTokens: await dataSources.venusAPI.getSuppliedTokens(address),
                 borrowedTokens: await dataSources.venusAPI.getBorrowedTokens(address),
                 vaiMintedAmount: await dataSources.venusAPI.getVAIMintedAmount(address),
+                tokens: [],
+            };
+        },
+
+        cream: async (parent, args, { dataSources }) => {
+            return {
+                supportTokens: await dataSources.creamFinanceAPI.getSupportTokens()
             };
         },
     },
@@ -50,10 +59,36 @@ export const resolvers: Resolvers = {
         id: () => '',
         address: () => '0x',
         name: () => 'TAROZONE',
-        symbol: () => 'TARO',
+        symbol: () => 'BNB',
         decimals: () => 18,
         price: () => '2.9',
-        value: () => '0',
+        logoURI: async (parent, args, { dataSources }) => {
+            if (parent.symbol.toUpperCase() == 'BNB') {
+                return 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png';
+            }
+
+            return dataSources.trustWalletAPI.getLogoURI(parent.symbol);
+        }
+    },
+
+    CreamToken: {
+        name: async (parent: CreamToken) => {
+            const provider = new ethers.providers.JsonRpcProvider('https://bsc-dataseed.binance.org/');
+            const contract = new ethers.Contract(parent.address, crToken, provider);
+            return contract.name();
+        },
+
+        supplyApy: async (parent: CreamToken, args, { dataSources }) => {
+            return dataSources.creamFinanceAPI.getSupplyApy(parent.supplyRatePerBlock);
+        },
+
+        borrowApy: async (parent: CreamToken, args, { dataSources }) => {
+            return dataSources.creamFinanceAPI.getSupplyApy(parent.borrowRatePerBlock);
+        },
+
+        logoURI: async (parent, args, { dataSources }) => {
+            return null
+        }
     },
 
     User: {

@@ -21,6 +21,7 @@ export type Query = {
   /** Query to get user by address */
   user?: Maybe<User>;
   venus?: Maybe<Venus>;
+  cream?: Maybe<CreamFinanceProtocol>;
 };
 
 
@@ -88,9 +89,10 @@ export type VenusToken = Token & {
   decimals: Scalars['Int'];
   price: Scalars['String'];
   /** Amount of token that user have */
-  value: Scalars['String'];
   logoURI?: Maybe<Scalars['String']>;
   isCollateral?: Maybe<Scalars['Boolean']>;
+  suppliedAmount?: Maybe<Scalars['String']>;
+  borrowedAmount?: Maybe<Scalars['String']>;
   underlyingAddress?: Maybe<Scalars['String']>;
   underlyingName?: Maybe<Scalars['String']>;
   underlyingSymbol?: Maybe<Scalars['String']>;
@@ -106,8 +108,30 @@ export type Venus = {
   totalSupplyBalance: Scalars['String'];
   totalBorrowBalance: Scalars['String'];
   vaiMintedAmount: Scalars['String'];
-  suppliedTokens: Array<Maybe<VenusToken>>;
-  borrowedTokens: Array<Maybe<VenusToken>>;
+  tokens: Array<VenusToken>;
+};
+
+/** Cream Token is a token in Cream Finance Protocol that will have APY for supply and borrow */
+export type CreamToken = {
+  __typename?: 'CreamToken';
+  address: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  symbol?: Maybe<Scalars['String']>;
+  decimals?: Maybe<Scalars['Int']>;
+  underlyingAddress?: Maybe<Scalars['String']>;
+  underlyingName?: Maybe<Scalars['String']>;
+  underlyingSymbol?: Maybe<Scalars['String']>;
+  supplyRatePerBlock?: Maybe<Scalars['Int']>;
+  borrowRatePerBlock?: Maybe<Scalars['Int']>;
+  supplyApy?: Maybe<Scalars['String']>;
+  borrowApy?: Maybe<Scalars['String']>;
+  logoURI?: Maybe<Scalars['String']>;
+};
+
+/** CreamFinanceProtocol is represent data about VenusProtocol */
+export type CreamFinanceProtocol = {
+  __typename?: 'CreamFinanceProtocol';
+  supportTokens?: Maybe<Array<CreamToken>>;
 };
 
 export enum CacheControlScope {
@@ -205,6 +229,8 @@ export type ResolversTypes = ResolversObject<{
   VenusToken: ResolverTypeWrapper<VenusToken>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Venus: ResolverTypeWrapper<Venus>;
+  CreamToken: ResolverTypeWrapper<CreamToken>;
+  CreamFinanceProtocol: ResolverTypeWrapper<CreamFinanceProtocol>;
   CacheControlScope: CacheControlScope;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
 }>;
@@ -221,6 +247,8 @@ export type ResolversParentTypes = ResolversObject<{
   VenusToken: VenusToken;
   Boolean: Scalars['Boolean'];
   Venus: Venus;
+  CreamToken: CreamToken;
+  CreamFinanceProtocol: CreamFinanceProtocol;
   Upload: Scalars['Upload'];
 }>;
 
@@ -232,6 +260,7 @@ export type CacheControlDirectiveResolver<Result, Parent, ContextType = any, Arg
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   venus?: Resolver<Maybe<ResolversTypes['Venus']>, ParentType, ContextType, RequireFields<QueryVenusArgs, 'address'>>;
+  cream?: Resolver<Maybe<ResolversTypes['CreamFinanceProtocol']>, ParentType, ContextType>;
 }>;
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
@@ -270,9 +299,10 @@ export type VenusTokenResolvers<ContextType = any, ParentType extends ResolversP
   symbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   decimals?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   price?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   logoURI?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   isCollateral?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  suppliedAmount?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  borrowedAmount?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   underlyingAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   underlyingName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   underlyingSymbol?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -288,8 +318,28 @@ export type VenusResolvers<ContextType = any, ParentType extends ResolversParent
   totalSupplyBalance?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   totalBorrowBalance?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   vaiMintedAmount?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  suppliedTokens?: Resolver<Array<Maybe<ResolversTypes['VenusToken']>>, ParentType, ContextType>;
-  borrowedTokens?: Resolver<Array<Maybe<ResolversTypes['VenusToken']>>, ParentType, ContextType>;
+  tokens?: Resolver<Array<ResolversTypes['VenusToken']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type CreamTokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreamToken'] = ResolversParentTypes['CreamToken']> = ResolversObject<{
+  address?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  symbol?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  decimals?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  underlyingAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  underlyingName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  underlyingSymbol?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  supplyRatePerBlock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  borrowRatePerBlock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  supplyApy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  borrowApy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  logoURI?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type CreamFinanceProtocolResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreamFinanceProtocol'] = ResolversParentTypes['CreamFinanceProtocol']> = ResolversObject<{
+  supportTokens?: Resolver<Maybe<Array<ResolversTypes['CreamToken']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -304,6 +354,8 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Currency?: CurrencyResolvers<ContextType>;
   VenusToken?: VenusTokenResolvers<ContextType>;
   Venus?: VenusResolvers<ContextType>;
+  CreamToken?: CreamTokenResolvers<ContextType>;
+  CreamFinanceProtocol?: CreamFinanceProtocolResolvers<ContextType>;
   Upload?: GraphQLScalarType;
 }>;
 

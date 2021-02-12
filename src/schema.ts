@@ -5,6 +5,7 @@ export const typeDefs = gql`
         "Query to get user by address"
         user(id: ID!): User
         venus(address: ID!): Venus
+        cream: CreamFinanceProtocol
     }
 
     "User is a someone who hold the wallet"
@@ -59,9 +60,10 @@ export const typeDefs = gql`
         decimals: Int!
         price: String!
         "Amount of token that user have"
-        value: String!
         logoURI: String
         isCollateral: Boolean
+        suppliedAmount: String
+        borrowedAmount: String
         underlyingAddress: String
         underlyingName: String
         underlyingSymbol: String
@@ -76,7 +78,31 @@ export const typeDefs = gql`
         totalSupplyBalance: String!
         totalBorrowBalance: String!
         vaiMintedAmount: String!
-        suppliedTokens: [VenusToken]!
-        borrowedTokens: [VenusToken]!
+        tokens: [VenusToken!]!
+    }
+
+    """
+    Cream Token is a token in Cream Finance Protocol that will have APY for supply and borrow
+    """
+    type CreamToken @cacheControl(maxAge: 1800) {
+        address: ID!
+        name: String!
+        symbol: String!
+        decimals: Int!
+        underlyingAddress: String!
+        underlyingName: String!
+        underlyingSymbol: String!
+        supplyRatePerBlock: Int!
+        borrowRatePerBlock: Int!
+        supplyApy: String @cacheControl(maxAge: 0)
+        borrowApy: String @cacheControl(maxAge: 0)
+        logoURI: String
+    }
+
+    """
+    CreamFinanceProtocol is represent data about VenusProtocol
+    """
+    type CreamFinanceProtocol {
+        supportTokens: [CreamToken!]
     }
 `;

@@ -1,10 +1,12 @@
 import { ApolloServer } from 'apollo-server';
+import { ApolloServerPluginInlineTrace } from "apollo-server-core";
 import { DataSources } from "apollo-server-core/dist/graphqlOptions";
 import { CoinGeckoAPI } from './datasources/coingecko';
 import { TrustWalletAPI } from './datasources/trustwallet';
 import { VenusAPI } from './datasources/venus';
 import { typeDefs } from './schema';
 import { resolvers } from './resolvers';
+import { CreamFinanceAPI } from './datasources/cream';
 
 type IDataSources = {
     coingeckoAPI: CoinGeckoAPI;
@@ -16,12 +18,14 @@ const dataSources: DataSources<IDataSources> = {
     coingeckoAPI: new CoinGeckoAPI(),
     trustWalletAPI: new TrustWalletAPI(),
     venusAPI: new VenusAPI(),
+    creamFinanceAPI: new CreamFinanceAPI(),
 }
 
 const server = new ApolloServer({
     typeDefs, 
     resolvers,
     dataSources: () => dataSources,
+    plugins: [ApolloServerPluginInlineTrace()],
     introspection: true,
     playground: true,
 });
