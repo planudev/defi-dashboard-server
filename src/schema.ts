@@ -5,7 +5,7 @@ export const typeDefs = gql`
         "Query to get user by address"
         user(id: ID!): User
         venus(address: ID!): Venus
-        cream: CreamFinanceProtocol
+        cream: CreamFinanceProtocol @cacheControl(maxAge: 1800)
     }
 
     "User is a someone who hold the wallet"
@@ -86,16 +86,16 @@ export const typeDefs = gql`
     """
     type CreamToken @cacheControl(maxAge: 1800) {
         address: ID!
-        name: String!
+        name: String
         symbol: String!
-        decimals: Int!
-        underlyingAddress: String!
-        underlyingName: String!
-        underlyingSymbol: String!
-        supplyRatePerBlock: Int!
-        borrowRatePerBlock: Int!
-        supplyApy: String @cacheControl(maxAge: 0)
-        borrowApy: String @cacheControl(maxAge: 0)
+        decimals: Int
+        underlyingAddress: String
+        underlyingName: String
+        underlyingSymbol: String
+        supplyRatePerBlock: Int
+        borrowRatePerBlock: Int
+        supplyApy: String @cacheControl(maxAge: 60)
+        borrowApy: String @cacheControl(maxAge: 60)
         logoURI: String
     }
 

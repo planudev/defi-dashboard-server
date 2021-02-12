@@ -34,29 +34,15 @@ class CreamFinanceAPI extends DataSource {
             if (symbol == 'crBNB') {
                 return {
                     address: contract.address,
-                    name: await contract.name(),
                     symbol: symbol,
-                    decimals: await contract.decimals(),
-                    underlyingAddress: '-',
-                    underlyingName: 'Binance Native Token',
-                    underlyingSymbol: 'BNB',
-                    supplyRatePerBlock: await contract.supplyRatePerBlock(),
-                    borrowRatePerBlock: await contract.borrowRatePerBlock()
+                    underlyingAddress: null,
                 };
             }
 
-            const underlyingContract = new ethers.Contract(await contract.underlying(), IBEP20, this.provider);
-
-            return {
+            return { 
                 address: contract.address,
-                name: await contract.name(),
                 symbol: symbol,
-                decimals: await contract.decimals(),
-                underlyingAddress: await underlyingContract.address,
-                underlyingName: await underlyingContract.name(),
-                underlyingSymbol: await underlyingContract.symbol(),
-                supplyRatePerBlock: await contract.supplyRatePerBlock(),
-                borrowRatePerBlock: await contract.borrowRatePerBlock()
+                underlyingAddress: await contract.underlying(),
             };
         }));
     }

@@ -116,7 +116,7 @@ export type CreamToken = {
   __typename?: 'CreamToken';
   address: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
-  symbol?: Maybe<Scalars['String']>;
+  symbol: Scalars['String'];
   decimals?: Maybe<Scalars['Int']>;
   underlyingAddress?: Maybe<Scalars['String']>;
   underlyingName?: Maybe<Scalars['String']>;
@@ -325,7 +325,7 @@ export type VenusResolvers<ContextType = any, ParentType extends ResolversParent
 export type CreamTokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreamToken'] = ResolversParentTypes['CreamToken']> = ResolversObject<{
   address?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  symbol?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  symbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   decimals?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   underlyingAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   underlyingName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
