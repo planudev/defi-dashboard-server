@@ -1,4 +1,5 @@
-import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { GraphQLResolveInfo } from 'graphql';
+import { Context } from './context';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -11,10 +12,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The `Upload` scalar type represents a file upload. */
-  Upload: any;
 };
-
 
 export type Query = {
   __typename?: 'Query';
@@ -134,12 +132,6 @@ export type CreamFinanceProtocol = {
   supportTokens?: Maybe<Array<CreamToken>>;
 };
 
-export enum CacheControlScope {
-  Public = 'PUBLIC',
-  Private = 'PRIVATE'
-}
-
-
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
@@ -231,8 +223,6 @@ export type ResolversTypes = ResolversObject<{
   Venus: ResolverTypeWrapper<Venus>;
   CreamToken: ResolverTypeWrapper<CreamToken>;
   CreamFinanceProtocol: ResolverTypeWrapper<CreamFinanceProtocol>;
-  CacheControlScope: CacheControlScope;
-  Upload: ResolverTypeWrapper<Scalars['Upload']>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -249,27 +239,21 @@ export type ResolversParentTypes = ResolversObject<{
   Venus: Venus;
   CreamToken: CreamToken;
   CreamFinanceProtocol: CreamFinanceProtocol;
-  Upload: Scalars['Upload'];
 }>;
 
-export type CacheControlDirectiveArgs = {   maxAge?: Maybe<Scalars['Int']>;
-  scope?: Maybe<CacheControlScope>; };
-
-export type CacheControlDirectiveResolver<Result, Parent, ContextType = any, Args = CacheControlDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   venus?: Resolver<Maybe<ResolversTypes['Venus']>, ParentType, ContextType, RequireFields<QueryVenusArgs, 'address'>>;
   cream?: Resolver<Maybe<ResolversTypes['CreamFinanceProtocol']>, ParentType, ContextType>;
 }>;
 
-export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   balances?: Resolver<Maybe<Array<Maybe<ResolversTypes['Currency']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type TokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = ResolversObject<{
+export type TokenResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = ResolversObject<{
   __resolveType: TypeResolveFn<'Currency' | 'VenusToken', ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -279,7 +263,7 @@ export type TokenResolvers<ContextType = any, ParentType extends ResolversParent
   logoURI?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
-export type CurrencyResolvers<ContextType = any, ParentType extends ResolversParentTypes['Currency'] = ResolversParentTypes['Currency']> = ResolversObject<{
+export type CurrencyResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Currency'] = ResolversParentTypes['Currency']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -292,7 +276,7 @@ export type CurrencyResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type VenusTokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['VenusToken'] = ResolversParentTypes['VenusToken']> = ResolversObject<{
+export type VenusTokenResolvers<ContextType = Context, ParentType extends ResolversParentTypes['VenusToken'] = ResolversParentTypes['VenusToken']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -313,7 +297,7 @@ export type VenusTokenResolvers<ContextType = any, ParentType extends ResolversP
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type VenusResolvers<ContextType = any, ParentType extends ResolversParentTypes['Venus'] = ResolversParentTypes['Venus']> = ResolversObject<{
+export type VenusResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Venus'] = ResolversParentTypes['Venus']> = ResolversObject<{
   userAddress?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   totalSupplyBalance?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   totalBorrowBalance?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -322,7 +306,7 @@ export type VenusResolvers<ContextType = any, ParentType extends ResolversParent
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type CreamTokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreamToken'] = ResolversParentTypes['CreamToken']> = ResolversObject<{
+export type CreamTokenResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CreamToken'] = ResolversParentTypes['CreamToken']> = ResolversObject<{
   address?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   symbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -338,16 +322,12 @@ export type CreamTokenResolvers<ContextType = any, ParentType extends ResolversP
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type CreamFinanceProtocolResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreamFinanceProtocol'] = ResolversParentTypes['CreamFinanceProtocol']> = ResolversObject<{
+export type CreamFinanceProtocolResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CreamFinanceProtocol'] = ResolversParentTypes['CreamFinanceProtocol']> = ResolversObject<{
   supportTokens?: Resolver<Maybe<Array<ResolversTypes['CreamToken']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
-  name: 'Upload';
-}
-
-export type Resolvers<ContextType = any> = ResolversObject<{
+export type Resolvers<ContextType = Context> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   Token?: TokenResolvers<ContextType>;
@@ -356,7 +336,6 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Venus?: VenusResolvers<ContextType>;
   CreamToken?: CreamTokenResolvers<ContextType>;
   CreamFinanceProtocol?: CreamFinanceProtocolResolvers<ContextType>;
-  Upload?: GraphQLScalarType;
 }>;
 
 
@@ -364,14 +343,4 @@ export type Resolvers<ContextType = any> = ResolversObject<{
  * @deprecated
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
  */
-export type IResolvers<ContextType = any> = Resolvers<ContextType>;
-export type DirectiveResolvers<ContextType = any> = ResolversObject<{
-  cacheControl?: CacheControlDirectiveResolver<any, any, ContextType>;
-}>;
-
-
-/**
- * @deprecated
- * Use "DirectiveResolvers" root object instead. If you wish to get "IDirectiveResolvers", add "typesPrefix: I" to your config.
- */
-export type IDirectiveResolvers<ContextType = any> = DirectiveResolvers<ContextType>;
+export type IResolvers<ContextType = Context> = Resolvers<ContextType>;

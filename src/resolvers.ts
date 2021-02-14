@@ -73,12 +73,12 @@ export const resolvers: Resolvers = {
 
     CreamToken: {
         name: async (parent: CreamToken, _, ctx) => {
-            const contract = new ethers.Contract(parent.address, crToken, ctx.provider);
+            const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
             return contract.name();
         },
 
         decimals: async (parent: CreamToken, _, ctx) => {
-            const contract = new ethers.Contract(parent.address, crToken, ctx.provider);
+            const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
             return contract.decimals();
         },
 
@@ -87,7 +87,7 @@ export const resolvers: Resolvers = {
                 return 'Binance Native Token';
             }
 
-            const underlyingContract = new ethers.Contract(parent.underlyingAddress, crToken, ctx.provider);
+            const underlyingContract = new ethers.Contract(parent.underlyingAddress, crToken, ctx.bscProvider);
             return underlyingContract.name();
         },
 
@@ -96,26 +96,32 @@ export const resolvers: Resolvers = {
                 return 'BNB';
             }
 
-            const underlyingContract = new ethers.Contract(parent.underlyingAddress, crToken, ctx.provider);
+            const underlyingContract = new ethers.Contract(parent.underlyingAddress, crToken, ctx.bscProvider);
             return underlyingContract.symbol();
         },
 
         supplyRatePerBlock: async (parent: CreamToken, _, ctx) => {
-            const contract = new ethers.Contract(parent.address, crToken, ctx.provider);
+            const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
             return contract.supplyRatePerBlock();
         },
 
         borrowRatePerBlock: async (parent: CreamToken, _, ctx) => {
-            const contract = new ethers.Contract(parent.address, crToken, ctx.provider);
+            const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
             return contract.borrowRatePerBlock();
         },
 
         supplyApy: async (parent: CreamToken, _, { dataSources }) => {
-            return dataSources.creamFinanceAPI.getSupplyApy(parent.supplyRatePerBlock);
+            if (!parent.supplyRatePerBlock) {
+                return '0';
+            }
+            return dataSources.creamFinanceAPI.getSupplyApy(parent.supplyRatePerBlock).toString();
         },
 
         borrowApy: async (parent: CreamToken, _, { dataSources }) => {
-            return dataSources.creamFinanceAPI.getSupplyApy(parent.borrowRatePerBlock);
+            if (!parent.borrowRatePerBlock) {
+                return '0';
+            }
+            return dataSources.creamFinanceAPI.getSupplyApy(parent.borrowRatePerBlock).toString();
         },
 
         logoURI: async (parent, _, { dataSources }) => {
