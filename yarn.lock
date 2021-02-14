@@ -1798,7 +1798,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express@npm:*":
+"@types/express@npm:*, @types/express@npm:^4.17.11":
   version: 4.17.11
   resolution: "@types/express@npm:4.17.11"
   dependencies:
@@ -1918,7 +1918,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/long@npm:^4.0.0":
+"@types/long@npm:^4.0.0, @types/long@npm:^4.0.1":
   version: 4.0.1
   resolution: "@types/long@npm:4.0.1"
   checksum: ed2a125330dbf2b425b2e58b1e1151a37106ceeec973f9f191fba0bda83ed00fae6d858254022e8b6e7165fec5f0c3872b7cb5f425c753383fed54699fb63b38
@@ -1942,7 +1942,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
+"@types/node@npm:*, @types/node@npm:^14.14.27":
   version: 14.14.27
   resolution: "@types/node@npm:14.14.27"
   checksum: efc78cf6e698e09925a2542bbea932dfe092408f4ce39b8f260b71df502221d76c925fd3227bc1f7427edd9cfb6f8c81c68a56b9ab690f08425e7e6e177e61e0
@@ -1963,6 +1963,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/prop-types@npm:*":
+  version: 15.7.3
+  resolution: "@types/prop-types@npm:15.7.3"
+  checksum: bd0eab69d5120ad3784d0c9985f902653d5924707a7f2b3702a330e762dfd61b6494954cb54ad0c52b918ffd6f1e7e27c9270e4442bc15250de348596f2f60cb
+  languageName: node
+  linkType: hard
+
 "@types/qs@npm:*":
   version: 6.9.5
   resolution: "@types/qs@npm:6.9.5"
@@ -1974,6 +1981,16 @@ __metadata:
   version: 1.2.3
   resolution: "@types/range-parser@npm:1.2.3"
   checksum: 092fabae0ecbd728d3e4debc938cd043e97cb9f210cfec1c56ff6065c6e91666f376eb586591825d6757a058fd1a1dc4831d34e04ecfbb0800f35b8d86d38635
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^17.0.2":
+  version: 17.0.2
+  resolution: "@types/react@npm:17.0.2"
+  dependencies:
+    "@types/prop-types": "*"
+    csstype: ^3.0.2
+  checksum: de1cd27ce57a961379978f83676d60d88bf729337683d1d4cb22dd8f285ed4200db19f7243052dc67c80133fe6798da1497456fe6f67a5bba5f5e30ce2544bfa
   languageName: node
   linkType: hard
 
@@ -2012,7 +2029,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/ws@npm:^7.0.0":
+"@types/ws@npm:^7.0.0, @types/ws@npm:^7.4.0":
   version: 7.4.0
   resolution: "@types/ws@npm:7.4.0"
   dependencies:
@@ -3343,6 +3360,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"csstype@npm:^3.0.2":
+  version: 3.0.6
+  resolution: "csstype@npm:3.0.6"
+  checksum: ebdca96d26e1af5604658e6876af29ac1e218750efb587684f2b2b13bb062a397b351586d285f911e6985e03112e56c2aee127d35ae7354cc7d25f3000e22556
+  languageName: node
+  linkType: hard
+
 "dashdash@npm:^1.12.0":
   version: 1.14.1
   resolution: "dashdash@npm:1.14.1"
@@ -3468,11 +3492,17 @@ __metadata:
     "@graphql-codegen/introspection": ^1.18.1
     "@graphql-codegen/typescript": ^1.20.2
     "@graphql-codegen/typescript-resolvers": ^1.18.1
+    "@types/express": ^4.17.11
+    "@types/long": ^4.0.1
+    "@types/node": ^14.14.27
+    "@types/react": ^17.0.2
+    "@types/ws": ^7.4.0
     apollo-cache-control: ^0.11.6
     apollo-datasource: ^0.7.3
     apollo-datasource-rest: ^0.9.7
     apollo-server: ^2.19.2
     apollo-server-caching: ^0.5.3
+    apollo-server-types: ^0.6.3
     concurrently: ^5.3.0
     cross-fetch: ^3.0.6
     eslint: ^7.20.0
