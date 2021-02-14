@@ -7,16 +7,17 @@
     "build": "tsc",
     "dev": "concurrently \"nodemon src/index.ts\" \"yarn generate --watch\"",
     "start": "node dist/index.js",
-    "generate": "graphql-codegen --config codegen.yml",
-    "prestart": "tsc && yarn generate"
+    "generate": "graphql-codegen --config codegen.yml"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
     "@apollo/client": "^3.3.7",
+    "apollo-cache-control": "^0.11.6",
     "apollo-datasource": "^0.7.3",
     "apollo-datasource-rest": "^0.9.7",
     "apollo-server": "^2.19.2",
+    "apollo-server-caching": "^0.5.3",
     "cross-fetch": "^3.0.6",
     "ethers": "^5.0.30",
     "graphql": "^15.5.0",
