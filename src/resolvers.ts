@@ -1,6 +1,8 @@
-import { Currency, Resolvers } from './generated.types';
+import { CreamToken, Currency, Resolvers } from './generated.types';
 import { bitQueryClient } from './apollo/client';
 import { TRACKING_BALANCE } from './apollo/queries';
+import { ethers } from "ethers";
+import crToken from './abis/crToken.json';
 
 export const resolvers: Resolvers = {
     Query: {
@@ -42,14 +44,83 @@ export const resolvers: Resolvers = {
                 suppliedTokens: await dataSources.venusAPI.getSuppliedTokens(address),
                 borrowedTokens: await dataSources.venusAPI.getBorrowedTokens(address),
                 vaiMintedAmount: await dataSources.venusAPI.getVAIMintedAmount(address),
+                tokens: [],
+            };
+        },
+
+        cream: async (parent, args, { dataSources }) => {
+            return {
+                supportTokens: await dataSources.creamFinanceAPI.getSupportTokens()
             };
         },
     },
 
     VenusToken: {
-        logoURI: (parent, _, { dataSources }) => {
-            if (parent.symbol === 'vBNB')
+    },
+
+    CreamToken: {
+        name: async (parent: CreamToken, _, ctx) => {
+            const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
+            return contract.name();
+        },
+
+        decimals: async (parent: CreamToken, _, ctx) => {
+            const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
+            return contract.decimals();
+        },
+
+        underlyingName: async (parent: CreamToken, _, ctx) => {
+            if (parent.underlyingAddress == null) {
+                return 'Binance Native Token';
+            }
+
+            const underlyingContract = new ethers.Contract(parent.underlyingAddress, crToken, ctx.bscProvider);
+            return underlyingContract.name();
+        },
+
+        underlyingSymbol: async (parent: CreamToken, _, ctx) => {
+            if (parent.underlyingAddress == null) {
+                return 'BNB';
+            }
+
+            const underlyingContract = new ethers.Contract(parent.underlyingAddress, crToken, ctx.bscProvider);
+            return underlyingContract.symbol();
+        },
+
+        supplyRatePerBlock: async (parent: CreamToken, _, ctx) => {
+            const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
+            return contract.supplyRatePerBlock();
+        },
+
+        borrowRatePerBlock: async (parent: CreamToken, _, ctx) => {
+            const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
+            return contract.borrowRatePerBlock();
+        },
+
+        supplyApy: async (parent: CreamToken, _, { dataSources }) => {
+            if (!parent.supplyRatePerBlock) {
+                return '0';
+            }
+            return dataSources.creamFinanceAPI.getSupplyApy(parent.supplyRatePerBlock).toString();
+        },
+
+        borrowApy: async (parent: CreamToken, _, { dataSources }) => {
+            if (!parent.borrowRatePerBlock) {
+                return '0';
+            }
+            return dataSources.creamFinanceAPI.getSupplyApy(parent.borrowRatePerBlock).toString();
+        },
+
+        logoURI: async (parent, _, { dataSources }) => {
+            const underlyingSymbol = parent.symbol.substring(2);
+
+            if (underlyingSymbol == 'crBNB') {
                 return 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png';
+            }
+
+            return dataSources.trustWalletAPI.getLogoURI(underlyingSymbol.toUpperCase());
+        },
+    },
 
             let symbol = parent.underlyingSymbol || "";
             if (symbol)

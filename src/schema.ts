@@ -5,6 +5,7 @@ export const typeDefs = gql`
         "Query to get user by address"
         user(id: ID!): User
         venus(address: ID!): Venus
+        cream: CreamFinanceProtocol @cacheControl(maxAge: 1800)
     }
 
     "User is a someone who hold the wallet"
@@ -63,6 +64,8 @@ export const typeDefs = gql`
         borrowedAmount: String
         logoURI: String
         isCollateral: Boolean
+        suppliedAmount: String
+        borrowedAmount: String
         underlyingAddress: String
         underlyingName: String
         underlyingSymbol: String

@@ -155,3 +155,10 @@ dist
 
 # End of https://www.toptal.com/developers/gitignore/api/node,macos,vscode
 
+.yarn/*
+!.yarn/cache
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
