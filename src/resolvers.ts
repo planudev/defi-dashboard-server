@@ -56,6 +56,16 @@ export const resolvers: Resolvers = {
     },
 
     VenusToken: {
+        logoURI: (parent, _, { dataSources }) => {
+            if (parent.symbol === 'vBNB')
+                return 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png';
+                
+            let symbol = parent.underlyingSymbol || "";
+            if (!symbol) {
+                return "";
+            }
+            return dataSources.trustWalletAPI.getLogoURI(symbol);
+        }
     },
 
     CreamToken: {
@@ -122,13 +132,6 @@ export const resolvers: Resolvers = {
         },
     },
 
-            let symbol = parent.underlyingSymbol || "";
-            if (symbol)
-                return dataSources.trustWalletAPI.getLogoURI(symbol);
-            return ""
-        }
-    },
-
     User: {},
 
     Token: {
@@ -146,7 +149,6 @@ export const resolvers: Resolvers = {
             if (parent.symbol.toUpperCase() == 'BNB') {
                 return 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png';
             }
-
             return dataSources.trustWalletAPI.getLogoURI(parent.symbol);
         }
     },

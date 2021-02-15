@@ -64,8 +64,6 @@ export const typeDefs = gql`
         borrowedAmount: String
         logoURI: String
         isCollateral: Boolean
-        suppliedAmount: String
-        borrowedAmount: String
         underlyingAddress: String
         underlyingName: String
         underlyingSymbol: String
@@ -82,5 +80,30 @@ export const typeDefs = gql`
         vaiMintedAmount: String!
         suppliedTokens: [VenusToken!]!
         borrowedTokens: [VenusToken!]!
+    }
+
+    """
+    Cream Token is a token in Cream Finance Protocol that will have APY for supply and borrow
+    """
+    type CreamToken @cacheControl(maxAge: 1800) {
+        address: ID!
+        name: String
+        symbol: String!
+        decimals: Int
+        underlyingAddress: String
+        underlyingName: String
+        underlyingSymbol: String
+        supplyRatePerBlock: Int
+        borrowRatePerBlock: Int
+        supplyApy: String @cacheControl(maxAge: 60)
+        borrowApy: String @cacheControl(maxAge: 60)
+        logoURI: String
+    }
+
+    """
+    CreamFinanceProtocol is represent data about VenusProtocol
+    """
+    type CreamFinanceProtocol {
+        supportTokens: [CreamToken!]
     }
 `;
