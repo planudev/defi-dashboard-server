@@ -1,5 +1,4 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { Context } from './context';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -242,19 +241,19 @@ export type ResolversParentTypes = ResolversObject<{
   CreamFinanceProtocol: CreamFinanceProtocol;
 }>;
 
-export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   venus?: Resolver<Maybe<ResolversTypes['Venus']>, ParentType, ContextType, RequireFields<QueryVenusArgs, 'address'>>;
   cream?: Resolver<Maybe<ResolversTypes['CreamFinanceProtocol']>, ParentType, ContextType>;
 }>;
 
-export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   balances?: Resolver<Maybe<Array<Maybe<ResolversTypes['Currency']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type TokenResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = ResolversObject<{
+export type TokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = ResolversObject<{
   __resolveType: TypeResolveFn<'Currency' | 'VenusToken', ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -264,7 +263,7 @@ export type TokenResolvers<ContextType = Context, ParentType extends ResolversPa
   logoURI?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
-export type CurrencyResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Currency'] = ResolversParentTypes['Currency']> = ResolversObject<{
+export type CurrencyResolvers<ContextType = any, ParentType extends ResolversParentTypes['Currency'] = ResolversParentTypes['Currency']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -277,7 +276,7 @@ export type CurrencyResolvers<ContextType = Context, ParentType extends Resolver
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type VenusTokenResolvers<ContextType = Context, ParentType extends ResolversParentTypes['VenusToken'] = ResolversParentTypes['VenusToken']> = ResolversObject<{
+export type VenusTokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['VenusToken'] = ResolversParentTypes['VenusToken']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -298,7 +297,7 @@ export type VenusTokenResolvers<ContextType = Context, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type VenusResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Venus'] = ResolversParentTypes['Venus']> = ResolversObject<{
+export type VenusResolvers<ContextType = any, ParentType extends ResolversParentTypes['Venus'] = ResolversParentTypes['Venus']> = ResolversObject<{
   userAddress?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   totalSupplyBalance?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   totalBorrowBalance?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -308,7 +307,7 @@ export type VenusResolvers<ContextType = Context, ParentType extends ResolversPa
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type CreamTokenResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CreamToken'] = ResolversParentTypes['CreamToken']> = ResolversObject<{
+export type CreamTokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreamToken'] = ResolversParentTypes['CreamToken']> = ResolversObject<{
   address?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   symbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -324,12 +323,12 @@ export type CreamTokenResolvers<ContextType = Context, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type CreamFinanceProtocolResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CreamFinanceProtocol'] = ResolversParentTypes['CreamFinanceProtocol']> = ResolversObject<{
+export type CreamFinanceProtocolResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreamFinanceProtocol'] = ResolversParentTypes['CreamFinanceProtocol']> = ResolversObject<{
   supportTokens?: Resolver<Maybe<Array<ResolversTypes['CreamToken']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type Resolvers<ContextType = Context> = ResolversObject<{
+export type Resolvers<ContextType = any> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   Token?: TokenResolvers<ContextType>;
@@ -345,4 +344,4 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
  * @deprecated
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
  */
-export type IResolvers<ContextType = Context> = Resolvers<ContextType>;
+export type IResolvers<ContextType = any> = Resolvers<ContextType>;

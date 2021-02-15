@@ -3,6 +3,7 @@ import { bitQueryClient } from './apollo/client';
 import { TRACKING_BALANCE } from './apollo/queries';
 import { ethers } from "ethers";
 import crToken from './abis/crToken.json';
+import { CustomResolversContext } from './types';
 
 export const resolvers: Resolvers = {
     Query: {
@@ -69,17 +70,17 @@ export const resolvers: Resolvers = {
     },
 
     CreamToken: {
-        name: async (parent: CreamToken, _, ctx) => {
+        name: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
             const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
             return contract.name();
         },
 
-        decimals: async (parent: CreamToken, _, ctx) => {
+        decimals: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
             const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
             return contract.decimals();
         },
 
-        underlyingName: async (parent: CreamToken, _, ctx) => {
+        underlyingName: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
             if (parent.underlyingAddress == null) {
                 return 'Binance Native Token';
             }
@@ -88,7 +89,7 @@ export const resolvers: Resolvers = {
             return underlyingContract.name();
         },
 
-        underlyingSymbol: async (parent: CreamToken, _, ctx) => {
+        underlyingSymbol: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
             if (parent.underlyingAddress == null) {
                 return 'BNB';
             }
@@ -97,12 +98,12 @@ export const resolvers: Resolvers = {
             return underlyingContract.symbol();
         },
 
-        supplyRatePerBlock: async (parent: CreamToken, _, ctx) => {
+        supplyRatePerBlock: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
             const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
             return contract.supplyRatePerBlock();
         },
 
-        borrowRatePerBlock: async (parent: CreamToken, _, ctx) => {
+        borrowRatePerBlock: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
             const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
             return contract.borrowRatePerBlock();
         },
