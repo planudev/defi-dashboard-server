@@ -71,13 +71,15 @@ export const resolvers: Resolvers = {
 
     CreamToken: {
         name: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
-            const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
-            return contract.name();
+            return ctx.dataSources.creamFinanceAPI.getName(parent.address);
+        },
+
+        symbol: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
+            return ctx.dataSources.creamFinanceAPI.getSymbol(parent.address);
         },
 
         decimals: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
-            const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
-            return contract.decimals();
+            return ctx.dataSources.creamFinanceAPI.getDecimals(parent.address);
         },
 
         underlyingName: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
