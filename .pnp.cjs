@@ -13297,7 +13297,7 @@ class NodeFS extends BasePortableFakeFS {
 
   async rmdirPromise(p, opts) {
     return await new Promise((resolve, reject) => {
-      // TODO [$602a9785036a770975c66d47]: always pass opts when min node version is 12.10+
+      // TODO [#14]: always pass opts when min node version is 12.10+
       if (opts) {
         this.realFs.rmdir(npath.fromPortablePath(p), opts, this.makeCallback(resolve, reject));
       } else {
@@ -18350,7 +18350,7 @@ function makeManager(pnpapi, opts) {
       if (cached !== undefined) return addToCacheAndReturn(start, curr, cached);
       const cjsCandidate = ppath.join(curr, Filename.pnpCjs);
       if (xfs.existsSync(cjsCandidate) && xfs.statSync(cjsCandidate).isFile()) return addToCacheAndReturn(start, curr, cjsCandidate); // We still support .pnp.js files to improve multi-project compatibility.
-      // TODO [$602a9785036a770975c66d48]: Remove support for .pnp.js files after they stop being used.
+      // TODO [#15]: Remove support for .pnp.js files after they stop being used.
 
       const legacyCjsCandidate = ppath.join(curr, Filename.pnpJs);
       if (xfs.existsSync(legacyCjsCandidate) && xfs.statSync(legacyCjsCandidate).isFile()) return addToCacheAndReturn(start, curr, legacyCjsCandidate);
