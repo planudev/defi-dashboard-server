@@ -47,18 +47,18 @@ export const resolvers: Resolvers = {
     },
 
     VenusToken: {
-        id: () => '',
-        address: () => '0x',
-        name: () => 'TAROZONE',
-        symbol: () => 'TARO',
-        decimals: () => 18,
-        price: () => '2.9',
-        value: () => '0',
+        logoURI: (parent, _, { dataSources }) => {
+            if (parent.symbol === 'vBNB')
+                return 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png';
+
+            let symbol = parent.underlyingSymbol || "";
+            if (symbol)
+                return dataSources.trustWalletAPI.getLogoURI(symbol);
+            return ""
+        }
     },
 
-    User: {
-        
-    },
+    User: {},
 
     Token: {
         __resolveType(token, context, info) {

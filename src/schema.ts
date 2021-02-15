@@ -59,7 +59,8 @@ export const typeDefs = gql`
         decimals: Int!
         price: String!
         "Amount of token that user have"
-        value: String!
+        suppliedAmount: String
+        borrowedAmount: String
         logoURI: String
         isCollateral: Boolean
         underlyingAddress: String
@@ -76,7 +77,7 @@ export const typeDefs = gql`
         totalSupplyBalance: String!
         totalBorrowBalance: String!
         vaiMintedAmount: String!
-        suppliedTokens: [VenusToken]!
-        borrowedTokens: [VenusToken]!
+        suppliedTokens: [VenusToken!]!
+        borrowedTokens: [VenusToken!]!
     }
 `;

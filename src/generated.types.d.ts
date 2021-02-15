@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { GraphQLResolveInfo } from 'graphql';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -11,10 +11,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The `Upload` scalar type represents a file upload. */
-  Upload: any;
 };
-
 
 export type Query = {
   __typename?: 'Query';
@@ -88,7 +85,8 @@ export type VenusToken = Token & {
   decimals: Scalars['Int'];
   price: Scalars['String'];
   /** Amount of token that user have */
-  value: Scalars['String'];
+  suppliedAmount?: Maybe<Scalars['String']>;
+  borrowedAmount?: Maybe<Scalars['String']>;
   logoURI?: Maybe<Scalars['String']>;
   isCollateral?: Maybe<Scalars['Boolean']>;
   underlyingAddress?: Maybe<Scalars['String']>;
@@ -106,15 +104,8 @@ export type Venus = {
   totalSupplyBalance: Scalars['String'];
   totalBorrowBalance: Scalars['String'];
   vaiMintedAmount: Scalars['String'];
-  suppliedTokens: Array<Maybe<VenusToken>>;
-  borrowedTokens: Array<Maybe<VenusToken>>;
+  suppliedTokens: Array<VenusToken>;
 };
-
-export enum CacheControlScope {
-  Public = 'PUBLIC',
-  Private = 'PRIVATE'
-}
-
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
@@ -205,8 +196,6 @@ export type ResolversTypes = ResolversObject<{
   VenusToken: ResolverTypeWrapper<VenusToken>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Venus: ResolverTypeWrapper<Venus>;
-  CacheControlScope: CacheControlScope;
-  Upload: ResolverTypeWrapper<Scalars['Upload']>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -221,13 +210,7 @@ export type ResolversParentTypes = ResolversObject<{
   VenusToken: VenusToken;
   Boolean: Scalars['Boolean'];
   Venus: Venus;
-  Upload: Scalars['Upload'];
 }>;
-
-export type CacheControlDirectiveArgs = {   maxAge?: Maybe<Scalars['Int']>;
-  scope?: Maybe<CacheControlScope>; };
-
-export type CacheControlDirectiveResolver<Result, Parent, ContextType = any, Args = CacheControlDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
@@ -270,7 +253,8 @@ export type VenusTokenResolvers<ContextType = any, ParentType extends ResolversP
   symbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   decimals?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   price?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  suppliedAmount?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  borrowedAmount?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   logoURI?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   isCollateral?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   underlyingAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -288,14 +272,9 @@ export type VenusResolvers<ContextType = any, ParentType extends ResolversParent
   totalSupplyBalance?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   totalBorrowBalance?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   vaiMintedAmount?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  suppliedTokens?: Resolver<Array<Maybe<ResolversTypes['VenusToken']>>, ParentType, ContextType>;
-  borrowedTokens?: Resolver<Array<Maybe<ResolversTypes['VenusToken']>>, ParentType, ContextType>;
+  suppliedTokens?: Resolver<Array<ResolversTypes['VenusToken']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
-
-export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
-  name: 'Upload';
-}
 
 export type Resolvers<ContextType = any> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
@@ -304,7 +283,6 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Currency?: CurrencyResolvers<ContextType>;
   VenusToken?: VenusTokenResolvers<ContextType>;
   Venus?: VenusResolvers<ContextType>;
-  Upload?: GraphQLScalarType;
 }>;
 
 
@@ -313,13 +291,3 @@ export type Resolvers<ContextType = any> = ResolversObject<{
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
  */
 export type IResolvers<ContextType = any> = Resolvers<ContextType>;
-export type DirectiveResolvers<ContextType = any> = ResolversObject<{
-  cacheControl?: CacheControlDirectiveResolver<any, any, ContextType>;
-}>;
-
-
-/**
- * @deprecated
- * Use "DirectiveResolvers" root object instead. If you wish to get "IDirectiveResolvers", add "typesPrefix: I" to your config.
- */
-export type IDirectiveResolvers<ContextType = any> = DirectiveResolvers<ContextType>;
