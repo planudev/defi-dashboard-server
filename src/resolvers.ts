@@ -3,6 +3,7 @@ import { bitQueryClient } from './apollo/client';
 import { TRACKING_BALANCE } from './apollo/queries';
 import { ethers } from "ethers";
 import crToken from './abis/crToken.json';
+import { CustomResolversContext } from './types';
 
 export const resolvers: Resolvers = {
     Query: {
@@ -56,33 +57,30 @@ export const resolvers: Resolvers = {
     },
 
     VenusToken: {
-        id: () => '',
-        address: () => '0x',
-        name: () => 'TAROZONE',
-        symbol: () => 'BNB',
-        decimals: () => 18,
-        price: () => '2.9',
-        logoURI: async (parent, args, { dataSources }) => {
-            if (parent.symbol.toUpperCase() == 'BNB') {
+        logoURI: (parent, _, { dataSources }) => {
+            if (parent.symbol === 'vBNB')
                 return 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png';
+                
+            let symbol = parent.underlyingSymbol || "";
+            if (!symbol) {
+                return "";
             }
-
-            return dataSources.trustWalletAPI.getLogoURI(parent.symbol.toUpperCase());
+            return dataSources.trustWalletAPI.getLogoURI(symbol);
         }
     },
 
     CreamToken: {
-        name: async (parent: CreamToken, _, ctx) => {
+        name: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
             const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
             return contract.name();
         },
 
-        decimals: async (parent: CreamToken, _, ctx) => {
+        decimals: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
             const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
             return contract.decimals();
         },
 
-        underlyingName: async (parent: CreamToken, _, ctx) => {
+        underlyingName: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
             if (parent.underlyingAddress == null) {
                 return 'Binance Native Token';
             }
@@ -91,7 +89,7 @@ export const resolvers: Resolvers = {
             return underlyingContract.name();
         },
 
-        underlyingSymbol: async (parent: CreamToken, _, ctx) => {
+        underlyingSymbol: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
             if (parent.underlyingAddress == null) {
                 return 'BNB';
             }
@@ -100,12 +98,12 @@ export const resolvers: Resolvers = {
             return underlyingContract.symbol();
         },
 
-        supplyRatePerBlock: async (parent: CreamToken, _, ctx) => {
+        supplyRatePerBlock: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
             const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
             return contract.supplyRatePerBlock();
         },
 
-        borrowRatePerBlock: async (parent: CreamToken, _, ctx) => {
+        borrowRatePerBlock: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
             const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
             return contract.borrowRatePerBlock();
         },
@@ -135,9 +133,7 @@ export const resolvers: Resolvers = {
         },
     },
 
-    User: {
-        
-    },
+    User: {},
 
     Token: {
         __resolveType(token, context, info) {
@@ -154,7 +150,6 @@ export const resolvers: Resolvers = {
             if (parent.symbol.toUpperCase() == 'BNB') {
                 return 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png';
             }
-
             return dataSources.trustWalletAPI.getLogoURI(parent.symbol);
         }
     },

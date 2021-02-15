@@ -2,12 +2,13 @@ import { ApolloServer } from 'apollo-server';
 import 'apollo-cache-control';
 import { typeDefs } from './schema';
 import { resolvers } from './resolvers';
-import { context } from './context';
+import { context, dataSources } from './context';
 
 const server = new ApolloServer({
     typeDefs, 
     resolvers,
-    context,
+    dataSources: (): any => dataSources,
+    context: () => context,
     tracing: true,
     playground: true
 });

@@ -35,8 +35,6 @@ class CreamFinanceAPI extends DataSource {
         return apy;
     }
 
-    // private async getByKeyIfUndefiendSet(cache: PrefixingKeyValueCache, key: string, getter: 
-
     public async getName(contractAddress: string): Promise<string> {
         const nameFromCache = await this.cache.get(`${contractAddress}.name`);
         if (nameFromCache != undefined) {

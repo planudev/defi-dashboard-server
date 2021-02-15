@@ -7,5 +7,4 @@ generates:
       - "typescript"
       - "typescript-resolvers"
     config:
-      contextType: ./context#Context
       useIndexSignature: true

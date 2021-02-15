@@ -1,5 +1,6 @@
 import { RESTDataSource } from 'apollo-datasource-rest';
 
+
 type TrustWalletTokenLists = {
     name: string;
     logoURI: string;
@@ -34,22 +35,20 @@ class TrustWalletAPI extends RESTDataSource {
     }
 
     public async getLogoURI(symbol: string): Promise<string> {
-        if (this.isDataNeedRefresh()) {
+        if (this.isDataNeedRefresh())
             await this.refreshData();
-        }
 
         const token = this.cacheMappedTokens[symbol.toUpperCase()];
-        if (token == undefined) {
+        if (token === undefined)
             return '';
-        }
 
         const contractAddress = token.address;
-
         return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain/assets/${contractAddress}/logo.png`;
     }
 
     private async getTokenRecords(): Promise<Record<string, TrustWalletToken>> {
-        const data = await this.get('smartchain/tokenlist.json');
+        
+        const data = await this.get('smartchain/tokenlist.json');   // ปัญหาอยู่บรรทัดนี่แหละ
         const trustWalletTokenLists: TrustWalletTokenLists = JSON.parse(data);
 
         const mappedTokens: Record<string, TrustWalletToken> = {};
