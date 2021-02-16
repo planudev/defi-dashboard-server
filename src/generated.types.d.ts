@@ -119,8 +119,8 @@ export type CreamToken = {
   underlyingAddress?: Maybe<Scalars['String']>;
   underlyingName?: Maybe<Scalars['String']>;
   underlyingSymbol?: Maybe<Scalars['String']>;
-  supplyRatePerBlock?: Maybe<Scalars['Int']>;
-  borrowRatePerBlock?: Maybe<Scalars['Int']>;
+  supplyRatePerBlock?: Maybe<Scalars['String']>;
+  borrowRatePerBlock?: Maybe<Scalars['String']>;
   supplyApy?: Maybe<Scalars['String']>;
   borrowApy?: Maybe<Scalars['String']>;
   logoURI?: Maybe<Scalars['String']>;
@@ -315,8 +315,8 @@ export type CreamTokenResolvers<ContextType = any, ParentType extends ResolversP
   underlyingAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   underlyingName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   underlyingSymbol?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  supplyRatePerBlock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  borrowRatePerBlock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  supplyRatePerBlock?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  borrowRatePerBlock?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   supplyApy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   borrowApy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   logoURI?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

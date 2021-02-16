@@ -3,8 +3,15 @@ import { InMemoryLRUCache, PrefixingKeyValueCache } from 'apollo-server-caching'
 import crToken from '../abis/crToken.json';
 import IBEP20 from '../abis/IBEP20.json';
 import creamMainnetConfig from '../config/cream-mainnet.json';
-import { ethers } from "ethers";
+import { ethers, BigNumber } from "ethers";
 import { CreamToken } from "../generated.types";
+import * as O from 'fp-ts/Option';
+import { map } from 'fp-ts/Option';
+import { pipe } from 'fp-ts/function';
+import has from 'lodash/fp/has';
+import prop from 'lodash/fp/prop';
+import compose from 'lodash/fp/compose';
+import curry from 'lodash/fp/curry';
 
 type CreamTokenCache = {
     contract: ethers.Contract;
@@ -13,6 +20,8 @@ type CreamTokenCache = {
     decimals?: number;
     underlyingAddress?: string;
 }
+
+const safeProp = curry((p: string, obj: Record<string, any>) => compose(O.of, prop(p))(obj));
 
 class CreamFinanceAPI extends DataSource {
     private provider: ethers.providers.JsonRpcProvider;
@@ -37,6 +46,7 @@ class CreamFinanceAPI extends DataSource {
         const blocksPerDay = 20 * 60 * 24;
         const daysPerYear = 365;
 
+        // const apy = (ratePerBlockBigNumber.mul(ethMantissa).div(blocksPerDay)).add(1).pow(daysPerYear).sub(1).mul(100);
         const apy = (((Math.pow((ratePerBlock / ethMantissa * blocksPerDay) + 1, daysPerYear))) - 1) * 100;
 
         return apy;
@@ -74,20 +84,25 @@ class CreamFinanceAPI extends DataSource {
         return symbol;
     }
 
-    public async getDecimals(contractAddress: string): Promise<number | null> {
-        const creamTokenCache = this.cache[contractAddress];
-        if (creamTokenCache == undefined) {
-            return null;
+    public async getDecimals(contractAddress: string): Promise<number> {
+        const key = 'decimals';
+        const optionCreamTokenCache: O.Option<CreamTokenCache> = safeProp(contractAddress)(this.cache);
+        if (O.isNone(optionCreamTokenCache)) {
+            return 0;
         }
 
-        if (creamTokenCache.decimals != undefined) {
-            return creamTokenCache.decimals;
-        }
-
-        const decimals = await creamTokenCache.contract.decimals();
-        creamTokenCache.decimals = decimals;
+        const optionDecimals: O.Option<number> = pipe(
+            optionCreamTokenCache,
+            O.chain<CreamTokenCache, number>(safeProp(key)),
+            O.chain(O.fromNullable) 
+        );
         
-        return decimals;
+        if (O.isSome(optionDecimals)) {
+            return optionDecimals.value;
+        }
+
+        this.cache[contractAddress].decimals = await optionCreamTokenCache.value.contract.decimals();
+        return this.cache[contractAddress].decimals ?? 0;
     }
 
     public async getUnderlyingAddress(contractAddress: string): Promise<string | null> {
@@ -132,21 +147,39 @@ class CreamFinanceAPI extends DataSource {
 
     public async getSupportTokens(): Promise<CreamToken[]> {
         return await Promise.all(this.creamTokenContracts.map(async (contract, index) => {
-            // const symbol = await this.getSymbol(contract.address);
-            // if (symbol == 'crBNB') {
-            //     return {
-            //         address: contract.address,
-            //         symbol: symbol,
-            //         underlyingAddress: null,
-            //     };
-            // }
+            const symbol = await this.getSymbol(contract.address);
+            if (symbol == 'crBNB') {
+                return {
+                    address: contract.address,
+                    symbol: symbol,
+                    underlyingAddress: null,
+                };
+            }
 
             return { 
                 address: contract.address,
-                symbol: 'symbol',
-                // underlyingAddress: await contract.underlying(),
+                symbol: symbol,
+                underlyingAddress: await this.getUnderlyingAddress(contract.address),
             };
         }));
+    }
+
+    public async getSupplyRatePerBlock(contractAddress: string): Promise<number> {
+        const optionCreamTokenCache: O.Option<CreamTokenCache> = safeProp(contractAddress)(this.cache);
+        if (O.isNone(optionCreamTokenCache)) {
+            return 0;
+        }
+
+        return await optionCreamTokenCache.value.contract.supplyRatePerBlock();
+    }
+
+    public async getBorrowRatePerBlock(contractAddress: string): Promise<number> {
+        const optionCreamTokenCache: O.Option<CreamTokenCache> = safeProp(contractAddress)(this.cache);
+        if (O.isNone(optionCreamTokenCache)) {
+            return 0;
+        }
+
+        return await optionCreamTokenCache.value.contract.borrowRatePerBlock();
     }
 
     public getSupplyApy(supplyRatePerBlock: number): number {
