@@ -1,14 +1,13 @@
 import Web3 from "web3";
 import { BSCNetwork, ContractType } from '../../types';
 import { getNetworkUri } from './utils';
+import venusAbi from './config/venusAbi.json';
 
 
 const fs = require('fs');
 
 
 export class VenusContract {
-
-    private abiPath: string = './src/datasources/venus-util/config/venusAbi.json';
     private web3: any;
     private abiConfig: any;
 
@@ -42,8 +41,7 @@ export class VenusContract {
     }
 
     private loadAbiConfig() {
-        const content = fs.readFileSync(this.abiPath);
-        return JSON.parse(content);
+        return venusAbi;
     }
 
     private getAbi(contractType: ContractType) {
