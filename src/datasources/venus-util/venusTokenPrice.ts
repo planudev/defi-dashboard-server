@@ -28,7 +28,7 @@ export class VenusTokenPrice {
     }
     
     private async getPrice(vTokenAddress: string): Promise<string> {
-        const priceContract = await this.contractCreator.createPriceOracleContract(VenusMainnetAddress.PRICEORACLE);
+        const priceContract = await this.contractCreator.createPriceOracleContract(VenusMainnetAddress.PRICE_ORACLE);
         return await priceContract.methods.getUnderlyingPrice(vTokenAddress).call();
     }
 

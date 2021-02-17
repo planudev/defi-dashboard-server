@@ -9,21 +9,21 @@ export const getNetworkUri = (network: BSCNetwork): BSCNetworkUri => {
 };
 
 
-const datasourcePath: string = './src/datasources';
-// const datasourcePath: string = '.';
+// const datasourcePath: string = './src/datasources';
+const datasourcePath: string = '.';
 export const venusConfigPath: string = datasourcePath + '/venus-util/config';
 export const fortubeConfigPath: string = datasourcePath + '/fortube-util/config';
 
 
 export enum ForTubeMainnetAddress {
-    BANKCONTROLLER = '0xc78248D676DeBB4597e88071D3d889eCA70E5469',
-    PRICEORACLE = '0x19d76F29ca659bcFe95056A4b03885CC1439B257',
+    BANK_CONTROLLER = '0xc78248D676DeBB4597e88071D3d889eCA70E5469',
+    PRICE_ORACLE = '0x19d76F29ca659bcFe95056A4b03885CC1439B257',
 }
 
 
 export enum VenusMainnetAddress {
     COMPTROLLER = '0xfD36E2c2a6789Db23113685031d7F16329158384',
-    PRICEORACLE = '0x516c18DC440f107f12619a6d2cc320622807d0eE',
+    PRICE_ORACLE = '0x516c18DC440f107f12619a6d2cc320622807d0eE',
     VAI = '0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7',
 }
 

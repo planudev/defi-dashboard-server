@@ -32,7 +32,7 @@ export class ForTubeTokenData {
     }
 
     private async createBankControllerContract(): Promise<any> {
-        return await this.contractCreator.createBankControllerContract(ForTubeMainnetAddress.BANKCONTROLLER);
+        return await this.contractCreator.createBankControllerContract(ForTubeMainnetAddress.BANK_CONTROLLER);
     }
 
     private async getTokenData(fTokenAddress: string, userAddress: string = ''): Promise<ForTubeToken> {
@@ -47,7 +47,10 @@ export class ForTubeTokenData {
         let suppliedAmount = -1;
         let borrowedAmount = -1;
         if ( userAddress ) {
-            // calculation's here...
+            const results = await token.methods.getAccountState(userAddress).call();
+            const [ fTokenBalance, borrowBalance ] = [ results['0'], results['1'] ];
+            suppliedAmount = Number(fTokenBalance) / 10 ** Number(decimals);
+            borrowedAmount = Number(borrowBalance) / 10 ** Number(decimals);
         }
 
         const apy_ = await token.methods.APY().call();
@@ -59,20 +62,20 @@ export class ForTubeTokenData {
             'name': name,
             'symbol': symbol,
             'decimals': Number(decimals),
-            'price': priceUsd.toFixed(),
-            'suppliedAmount': suppliedAmount.toFixed(),
-            'borrowedAmount': borrowedAmount.toFixed(),
+            'price': priceUsd.toPrecision(),
+            'suppliedAmount': suppliedAmount.toPrecision(),
+            'borrowedAmount': borrowedAmount.toPrecision(),
             'underlyingAddress': underlyingAddress,
             'underlyingName': underlyingName,
             'underlyingSymbol': underlyingSymbol,
-            'borrowApy': apy.toFixed(),
-            'supplyApy': apy.toFixed(),
+            'borrowApy': apy.toPrecision(),
+            'supplyApy': apy.toPrecision(),
         }
     }
 
     private async getPriceUsdAndDecimals(fTokenAddress: string): Promise<[Number, Number]> {
         if ( !this.tokenPrice )
-            this.tokenPrice = await this.contractCreator.createPriceOracleContract(ForTubeMainnetAddress.PRICEORACLE);
+            this.tokenPrice = await this.contractCreator.createPriceOracleContract(ForTubeMainnetAddress.PRICE_ORACLE);
         return await this.tokenPrice.getPriceUsdAndDecimals(fTokenAddress);
     }
 

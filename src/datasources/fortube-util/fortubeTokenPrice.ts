@@ -14,7 +14,7 @@ export class ForTubeTokenPrice {
 
     async getPriceUsdAndDecimals(fTokenAddress: string): Promise<[Number, Number]> {
         if (this.priceOracleNotCreated()) {
-            this.priceOracle = await this.contractCreator.createPriceOracleContract(ForTubeMainnetAddress.PRICEORACLE);
+            this.priceOracle = await this.contractCreator.createPriceOracleContract(ForTubeMainnetAddress.PRICE_ORACLE);
         }
 
         const token = await this.contractCreator.createFTokenContract(fTokenAddress);
