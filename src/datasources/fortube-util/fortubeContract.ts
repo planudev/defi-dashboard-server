@@ -26,11 +26,11 @@ export class ForTubeContract {
     }
 
     async createBankControllerContract(contractAddress: string) {
-        return this.createContract(ForTubeContractType.BANKCONTROLLER, contractAddress);
+        return this.createContract(ForTubeContractType.BANK_CONTROLLER, contractAddress);
     }
 
     async createPriceOracleContract(contractAddress: string) {
-        return this.createContract(ForTubeContractType.PRICEORACLE, contractAddress);
+        return this.createContract(ForTubeContractType.PRICE_ORACLE, contractAddress);
     }
 
     private async createContract(contractType: ForTubeContractType, contractAddress: string) {  
