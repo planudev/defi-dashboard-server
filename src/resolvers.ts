@@ -3,6 +3,7 @@ import { bitQueryClient } from './apollo/client';
 import { TRACKING_BALANCE } from './apollo/queries';
 import { ethers } from "ethers";
 import crToken from './abis/crToken.json';
+import { CustomResolversContext } from './types';
 
 export const resolvers: Resolvers = {
     Query: {
@@ -82,17 +83,19 @@ export const resolvers: Resolvers = {
     },
 
     CreamToken: {
-        name: async (parent: CreamToken, _, ctx) => {
-            const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
-            return contract.name();
+        name: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
+            return ctx.dataSources.creamFinanceAPI.getName(parent.address);
         },
 
-        decimals: async (parent: CreamToken, _, ctx) => {
-            const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
-            return contract.decimals();
+        symbol: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
+            return ctx.dataSources.creamFinanceAPI.getSymbol(parent.address);
         },
 
-        underlyingName: async (parent: CreamToken, _, ctx) => {
+        decimals: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
+            return ctx.dataSources.creamFinanceAPI.getDecimals(parent.address);
+        },
+
+        underlyingName: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
             if (parent.underlyingAddress == null) {
                 return 'Binance Native Token';
             }
@@ -101,43 +104,44 @@ export const resolvers: Resolvers = {
             return underlyingContract.name();
         },
 
-        underlyingSymbol: async (parent: CreamToken, _, ctx) => {
+        underlyingSymbol: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
             if (parent.underlyingAddress == null) {
                 return 'BNB';
             }
 
-            const underlyingContract = new ethers.Contract(parent.underlyingAddress, crToken, ctx.bscProvider);
-            return underlyingContract.symbol();
+            return parent.symbol.substring(2);
+            // const underlyingContract = new ethers.Contract(parent.underlyingAddress, crToken, ctx.bscProvider);
+            // return underlyingContract.symbol();
         },
 
-        supplyRatePerBlock: async (parent: CreamToken, _, ctx) => {
+        supplyRatePerBlock: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
             const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
-            return contract.supplyRatePerBlock();
+            return (await contract.supplyRatePerBlock()).toString();
         },
 
-        borrowRatePerBlock: async (parent: CreamToken, _, ctx) => {
+        borrowRatePerBlock: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
             const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);
-            return contract.borrowRatePerBlock();
+            return (await contract.borrowRatePerBlock()).toString();
         },
 
-        supplyApy: async (parent: CreamToken, _, { dataSources }) => {
-            if (!parent.supplyRatePerBlock) {
-                return '0';
-            }
-            return dataSources.creamFinanceAPI.getSupplyApy(parent.supplyRatePerBlock).toString();
+        supplyApy: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
+            const supplyRatePerBlock = await ctx.dataSources.creamFinanceAPI.getSupplyRatePerBlock(parent.address);
+            return ctx.dataSources.creamFinanceAPI.getSupplyApy(
+                Number(supplyRatePerBlock)
+            ).toString();
         },
 
-        borrowApy: async (parent: CreamToken, _, { dataSources }) => {
-            if (!parent.borrowRatePerBlock) {
-                return '0';
-            }
-            return dataSources.creamFinanceAPI.getSupplyApy(parent.borrowRatePerBlock).toString();
+        borrowApy: async (parent: CreamToken, _, ctx: CustomResolversContext) => {
+            const supplyRatePerBlock = await ctx.dataSources.creamFinanceAPI.getBorrowRatePerBlock(parent.address);
+            return ctx.dataSources.creamFinanceAPI.getBorrowApy(
+                Number(supplyRatePerBlock)
+            ).toString();
         },
 
         logoURI: async (parent, _, { dataSources }) => {
             const underlyingSymbol = parent.symbol.substring(2);
 
-            if (underlyingSymbol == 'crBNB') {
+            if (underlyingSymbol == 'BNB') {
                 return 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png';
             }
 

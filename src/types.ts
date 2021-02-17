@@ -1,3 +1,9 @@
+import { ethers } from "ethers";
+import { CoinGeckoAPI } from "./datasources/coingecko";
+import { CreamFinanceAPI } from "./datasources/cream";
+import { TrustWalletAPI } from "./datasources/trustwallet";
+import { VenusAPI } from "./datasources/venus";
+
 export enum BSCNetwork {
     Mainnet = 'mainnet',
     Testnet = 'testnet',
@@ -12,14 +18,28 @@ export enum VenusContractType {
     VENUS = 'venus',
     UNDERLYING = 'underlying',
     COMPTROLLER = 'Comptroller',
-    PRICEORACLE = 'PriceOracle',
+    PRICE_ORACLE = 'PriceOracle',
     VAI = 'VAI',
 }
 
 export enum ForTubeContractType {
     FToken = 'FToken',
     UNDERLYING = 'Underlying',
-    // BANK = 'Bank',
-    BANKCONTROLLER = 'BankController',
-    PRICEORACLE = 'PriceOracle',
+    BANK_CONTROLLER = 'BankController',
+    PRICE_ORACLE = 'PriceOracle',
+}
+
+export interface CustomContext {
+    bscProvider: ethers.providers.JsonRpcProvider;
+}
+
+export interface CustomDataSources {
+    coingeckoAPI: CoinGeckoAPI;
+    trustWalletAPI: TrustWalletAPI;
+    venusAPI: VenusAPI;
+    creamFinanceAPI: CreamFinanceAPI;
+}
+
+export interface CustomResolversContext extends CustomContext {
+    dataSources: CustomDataSources;
 }

@@ -1,14 +1,9 @@
 import Web3 from "web3";
 import { BSCNetwork, VenusContractType } from '../../types';
-import { getNetworkUri, venusConfigPath } from '../utils';
-
-
-const fs = require('fs');
-
+import { getNetworkUri, } from '../utils';
+import venusAbi from './config/venusAbi.json';
 
 export class VenusContract {
-    
-    private abiPath: string = venusConfigPath + '/venusAbi.json';
     private web3: any;
     private abiConfig: any;
 
@@ -30,7 +25,7 @@ export class VenusContract {
     }
 
     async createPriceOracleContract(contractAddress: string) {
-        return this.createContract(VenusContractType.PRICEORACLE, contractAddress);
+        return this.createContract(VenusContractType.PRICE_ORACLE, contractAddress);
     }
 
     async createVAIContract(contractAddress: string) {
@@ -42,8 +37,7 @@ export class VenusContract {
     }
 
     private loadAbiConfig() {
-        const content = fs.readFileSync(this.abiPath);
-        return JSON.parse(content);
+        return venusAbi;
     }
 
     private getAbi(contractType: VenusContractType) {

@@ -119,8 +119,8 @@ export const typeDefs = gql`
         underlyingAddress: String
         underlyingName: String
         underlyingSymbol: String
-        supplyRatePerBlock: Int
-        borrowRatePerBlock: Int
+        supplyRatePerBlock: String
+        borrowRatePerBlock: String
         supplyApy: String @cacheControl(maxAge: 60)
         borrowApy: String @cacheControl(maxAge: 60)
         logoURI: String
