@@ -3,6 +3,7 @@ import { CoinGeckoAPI } from "./datasources/coingecko";
 import { CreamFinanceAPI } from "./datasources/cream";
 import { TrustWalletAPI } from "./datasources/trustwallet";
 import { VenusAPI } from "./datasources/venus";
+import { ForTubeAPI } from "./datasources/fortube";
 
 export enum BSCNetwork {
     Mainnet = 'mainnet',
@@ -38,6 +39,7 @@ export interface CustomDataSources {
     trustWalletAPI: TrustWalletAPI;
     venusAPI: VenusAPI;
     creamFinanceAPI: CreamFinanceAPI;
+    forTubeAPI: ForTubeAPI,
 }
 
 export interface CustomResolversContext extends CustomContext {

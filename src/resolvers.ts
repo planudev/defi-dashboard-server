@@ -54,6 +54,18 @@ export const resolvers: Resolvers = {
                 supportTokens: await dataSources.creamFinanceAPI.getSupportTokens()
             };
         },
+
+        venusProtocol: async (_, __, ctx: CustomResolversContext) => {
+            return {
+                supportTokens: await ctx.dataSources.venusAPI.getSupportTokens()
+            }
+        },
+
+        forTubeProtocol: async (_, __, ctx: CustomResolversContext) => {
+            return {
+                supportTokens: await ctx.dataSources.forTubeAPI.getSupportTokens()
+            }
+        },
     },
 
     VenusToken: {

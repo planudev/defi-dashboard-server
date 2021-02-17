@@ -6,6 +6,8 @@ export const typeDefs = gql`
         user(id: ID!): User
         venus(address: ID!): Venus
         cream: CreamFinanceProtocol @cacheControl(maxAge: 1800)
+        venusProtocol: VenusProtocol
+        forTubeProtocol: ForTubeProtocol
     }
 
     "User is a someone who hold the wallet"
@@ -82,6 +84,13 @@ export const typeDefs = gql`
         borrowedTokens: [VenusToken!]!
     }
 
+    """
+    VenusProtocol is represent data about VenusProtocol
+    """
+    type VenusProtocol {
+        supportTokens: [VenusToken!]
+    }
+
     type ForTubeToken implements Token {
         id: ID!
         address: String!
@@ -108,6 +117,10 @@ export const typeDefs = gql`
         borrowedTokens: [ForTubeToken!]!
     }
 
+    type ForTubeProtocol {
+        supportTokens: [ForTubeToken!]
+    }
+
     """
     Cream Token is a token in Cream Finance Protocol that will have APY for supply and borrow
     """
@@ -127,7 +140,7 @@ export const typeDefs = gql`
     }
 
     """
-    CreamFinanceProtocol is represent data about VenusProtocol
+    CreamFinanceProtocol is represent data about CreamProtocol
     """
     type CreamFinanceProtocol {
         supportTokens: [CreamToken!]
