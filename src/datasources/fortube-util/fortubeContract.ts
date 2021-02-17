@@ -1,14 +1,9 @@
 import Web3 from "web3";
-import { getNetworkUri, fortubeConfigPath } from '../utils';
+import { getNetworkUri } from '../utils';
 import { BSCNetwork, ForTubeContractType } from '../../types';
-
-
-const fs = require('fs');
-
+import fortubeAbi from './config/fortubeAbi.json';
 
 export class ForTubeContract {
-    
-    private abiPath: string = fortubeConfigPath + '/fortubeAbi.json';
     private web3: any;
     private abiConfig: any;
 
@@ -38,8 +33,7 @@ export class ForTubeContract {
     }
 
     private loadAbiConfig() {
-        const content = fs.readFileSync(this.abiPath);
-        return JSON.parse(content);
+        return fortubeAbi;
     }
 
     private getAbi(contractType: ForTubeContractType) {
