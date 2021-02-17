@@ -68,6 +68,19 @@ export const resolvers: Resolvers = {
         }
     },
 
+    ForTubeToken: {
+        logoURI: (parent, _, { dataSources }) => {
+            if (parent.symbol === 'fBNB')
+                return 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png';
+                
+            let symbol = parent.underlyingSymbol || "";
+            if (!symbol) {
+                return "";
+            }
+            return dataSources.trustWalletAPI.getLogoURI(symbol);
+        }
+    },
+
     CreamToken: {
         name: async (parent: CreamToken, _, ctx) => {
             const contract = new ethers.Contract(parent.address, crToken, ctx.bscProvider);

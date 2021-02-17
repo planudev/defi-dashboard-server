@@ -1,5 +1,5 @@
 import { VenusContract } from './venusContract';
-import { MainnetAddress } from './utils';
+import { VenusMainnetAddress } from '../utils';
 
 
 export class VAITokenData {
@@ -22,6 +22,6 @@ export class VAITokenData {
     }
 
     private async createVAIContract(): Promise<any> {
-        return await this.contractCreator.createVAIContract(MainnetAddress.VAI);
+        return await this.contractCreator.createVAIContract(VenusMainnetAddress.VAI);
     }
 }

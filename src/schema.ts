@@ -82,6 +82,32 @@ export const typeDefs = gql`
         borrowedTokens: [VenusToken!]!
     }
 
+    type ForTubeToken implements Token {
+        id: ID!
+        address: String!
+        name: String!
+        symbol: String!
+        decimals: Int!
+        price: String!
+        "Amount of token that user have"
+        suppliedAmount: String
+        borrowedAmount: String
+        logoURI: String
+        underlyingAddress: String
+        underlyingName: String
+        underlyingSymbol: String
+        borrowApy: String
+        supplyApy: String
+    }
+
+    type ForTube {
+        userAddress: ID!
+        totalSupplyBalance: String!
+        totalBorrowBalance: String!
+        suppliedTokens: [ForTubeToken!]!
+        borrowedTokens: [ForTubeToken!]!
+    }
+
     """
     Cream Token is a token in Cream Finance Protocol that will have APY for supply and borrow
     """

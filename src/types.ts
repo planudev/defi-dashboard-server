@@ -8,10 +8,18 @@ export enum BSCNetworkUri {
     Testnet = 'https://data-seed-prebsc-1-s1.binance.org:8545',
 }
 
-export enum ContractType {
+export enum VenusContractType {
     VENUS = 'venus',
     UNDERLYING = 'underlying',
     COMPTROLLER = 'Comptroller',
     PRICEORACLE = 'PriceOracle',
     VAI = 'VAI',
+}
+
+export enum ForTubeContractType {
+    FToken = 'FToken',
+    UNDERLYING = 'Underlying',
+    // BANK = 'Bank',
+    BANKCONTROLLER = 'BankController',
+    PRICEORACLE = 'PriceOracle',
 }

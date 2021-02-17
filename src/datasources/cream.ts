@@ -6,6 +6,7 @@ import creamMainnetConfig from '../config/cream-mainnet.json';
 import { ethers } from "ethers";
 import { CreamToken } from "../generated.types";
 
+
 class CreamFinanceAPI extends DataSource {
     private provider: ethers.providers.JsonRpcProvider;
     private creamTokenContracts: ethers.Contract[];
