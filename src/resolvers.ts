@@ -54,11 +54,36 @@ export const resolvers: Resolvers = {
                 supportTokens: await dataSources.creamFinanceAPI.getSupportTokens()
             };
         },
+
+        venusProtocol: async (_, __, ctx: CustomResolversContext) => {
+            return {
+                supportTokens: await ctx.dataSources.venusAPI.getSupportTokens()
+            }
+        },
+
+        forTubeProtocol: async (_, __, ctx: CustomResolversContext) => {
+            return {
+                supportTokens: await ctx.dataSources.forTubeAPI.getSupportTokens()
+            }
+        },
     },
 
     VenusToken: {
         logoURI: (parent, _, { dataSources }) => {
             if (parent.symbol === 'vBNB')
+                return 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png';
+                
+            let symbol = parent.underlyingSymbol || "";
+            if (!symbol) {
+                return "";
+            }
+            return dataSources.trustWalletAPI.getLogoURI(symbol);
+        }
+    },
+
+    ForTubeToken: {
+        logoURI: (parent, _, { dataSources }) => {
+            if (parent.symbol === 'fBNB')
                 return 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png';
                 
             let symbol = parent.underlyingSymbol || "";

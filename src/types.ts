@@ -3,6 +3,7 @@ import { CoinGeckoAPI } from "./datasources/coingecko";
 import { CreamFinanceAPI } from "./datasources/cream";
 import { TrustWalletAPI } from "./datasources/trustwallet";
 import { VenusAPI } from "./datasources/venus";
+import { ForTubeAPI } from "./datasources/fortube";
 
 export enum BSCNetwork {
     Mainnet = 'mainnet',
@@ -14,12 +15,19 @@ export enum BSCNetworkUri {
     Testnet = 'https://data-seed-prebsc-1-s1.binance.org:8545',
 }
 
-export enum ContractType {
+export enum VenusContractType {
     VENUS = 'venus',
     UNDERLYING = 'underlying',
     COMPTROLLER = 'Comptroller',
-    PRICEORACLE = 'PriceOracle',
+    PRICE_ORACLE = 'PriceOracle',
     VAI = 'VAI',
+}
+
+export enum ForTubeContractType {
+    FToken = 'FToken',
+    UNDERLYING = 'Underlying',
+    BANK_CONTROLLER = 'BankController',
+    PRICE_ORACLE = 'PriceOracle',
 }
 
 export interface CustomContext {
@@ -31,6 +39,7 @@ export interface CustomDataSources {
     trustWalletAPI: TrustWalletAPI;
     venusAPI: VenusAPI;
     creamFinanceAPI: CreamFinanceAPI;
+    forTubeAPI: ForTubeAPI,
 }
 
 export interface CustomResolversContext extends CustomContext {

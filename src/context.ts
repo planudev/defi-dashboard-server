@@ -3,6 +3,7 @@ import { CoinGeckoAPI } from "./datasources/coingecko"
 import { CreamFinanceAPI } from "./datasources/cream"
 import { TrustWalletAPI } from "./datasources/trustwallet"
 import { VenusAPI } from "./datasources/venus"
+import { ForTubeAPI } from "./datasources/fortube";
 import { CustomContext, CustomDataSources } from "./types"
 
 export const dataSources: CustomDataSources = {
@@ -10,6 +11,7 @@ export const dataSources: CustomDataSources = {
     trustWalletAPI: new TrustWalletAPI(),
     venusAPI: new VenusAPI(),
     creamFinanceAPI: new CreamFinanceAPI(),
+    forTubeAPI: new ForTubeAPI(),
 };
 
 export const context: CustomContext = {

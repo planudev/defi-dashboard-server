@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { selectedNetwork } from './venus-util/utils';
+import { selectedNetwork } from './utils';
 import { VAITokenData } from './venus-util/vaiTokenData';
 import { VenusTokenData } from './venus-util/venusTokenData';
 import { VenusContract } from './venus-util/venusContract';
@@ -66,12 +66,21 @@ class VenusAPI<TContext = any> extends DataSource {
         return (await this.vaiTokenData.balanceOf(address)).toString();
     }
 
+    public async getSupportTokens(): Promise<VenusToken[]> {
+        const supportedTokenData = await this.getSupportedTokenData();
+        return supportedTokenData.map((tokenData: VenusToken) => {
+            delete tokenData.suppliedAmount;
+            delete tokenData.borrowedAmount;
+            return tokenData;
+        });
+    }
+
     private async updateTokenDataPeriod(address: string): Promise<void> {
         const addressInCache = address in this.tokenDataCached;
         if (!addressInCache)
             this.tokenDataCached[address] = { 'tokenData': [], 'timestamp': 0 };
         if (this.checkTimestamp(address)) {
-            const supportedTokenData = await this.venusTokenData.getSupportedTokenData(address);
+            const supportedTokenData = await this.getSupportedTokenData(address);
             this.tokenDataCached[address]['tokenData'] = supportedTokenData;
             this.tokenDataCached[address]['timestamp'] = Date.now();
         }
@@ -81,6 +90,9 @@ class VenusAPI<TContext = any> extends DataSource {
         return Date.now() - this.tokenDataCached[address]['timestamp'] >= this.updateTime;
     }
 
+    private async getSupportedTokenData(address: string = ''): Promise<VenusToken[]> {
+        return await this.venusTokenData.getSupportedTokenData(address);
+    }
 }
 
 export { VenusAPI };
@@ -94,5 +106,6 @@ export { VenusAPI };
 //     console.log(await venusApi.getSuppliedTokens(address));
 //     console.log(await venusApi.getBorrowedTokens(address));
 //     console.log(await venusApi.getVAIMintedAmount(address));
+//     console.log(await venusApi.getSupportTokens());
 // }
 // main().catch(console.error);

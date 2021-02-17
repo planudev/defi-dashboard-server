@@ -23,6 +23,7 @@ type CreamTokenCache = {
 
 const safeProp = curry((p: string, obj: Record<string, any>) => compose(O.of, prop(p))(obj));
 
+
 class CreamFinanceAPI extends DataSource {
     private provider: ethers.providers.JsonRpcProvider;
     private creamTokenContracts: ethers.Contract[];

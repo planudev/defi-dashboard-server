@@ -1,5 +1,5 @@
 import { VenusContract } from './venusContract';
-import { MainnetAddress } from './utils';
+import { VenusMainnetAddress } from '../utils';
 
 
 export class VenusTokenPrice {
@@ -28,7 +28,7 @@ export class VenusTokenPrice {
     }
     
     private async getPrice(vTokenAddress: string): Promise<string> {
-        const priceContract = await this.contractCreator.createPriceOracleContract(MainnetAddress.PRICEORACLE);
+        const priceContract = await this.contractCreator.createPriceOracleContract(VenusMainnetAddress.PRICEORACLE);
         return await priceContract.methods.getUnderlyingPrice(vTokenAddress).call();
     }
 
