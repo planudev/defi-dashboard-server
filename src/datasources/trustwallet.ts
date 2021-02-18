@@ -35,6 +35,10 @@ class TrustWalletAPI extends RESTDataSource {
     }
 
     public async getLogoURI(symbol: string): Promise<string> {
+        if (symbol == 'BNB') {
+            return 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png';
+        }
+
         if (this.isDataNeedRefresh())
             await this.refreshData();
 
