@@ -91,13 +91,13 @@ class ForTubeAPI<TContext = any> extends DataSource {
 export { ForTubeAPI };
 
 
-async function main() {
-    const address = '0x773A0f4903d572cBF929dD94e7261C7F554b6D4f';
-    const fortubeApi = new ForTubeAPI();
-    console.log(await fortubeApi.getTotalSupplyBalance(address));
-    console.log(await fortubeApi.getTotalBorrowBalance(address));
-    console.log(await fortubeApi.getSuppliedTokens(address));
-    console.log(await fortubeApi.getBorrowedTokens(address));
-    // console.log(await fortubeApi.getSupportTokens());
-}
-main().catch(console.error);
+// async function main() {
+//     const address = '0x773A0f4903d572cBF929dD94e7261C7F554b6D4f';
+//     const fortubeApi = new ForTubeAPI();
+//     console.log(await fortubeApi.getTotalSupplyBalance(address));
+//     console.log(await fortubeApi.getTotalBorrowBalance(address));
+//     console.log(await fortubeApi.getSuppliedTokens(address));
+//     console.log(await fortubeApi.getBorrowedTokens(address));
+//     // console.log(await fortubeApi.getSupportTokens());
+// }
+// main().catch(console.error);

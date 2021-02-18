@@ -8,6 +8,7 @@ export const typeDefs = gql`
         cream: CreamFinanceProtocol @cacheControl(maxAge: 1800)
         venusProtocol: VenusProtocol
         forTubeProtocol: ForTubeProtocol
+        logoURI(symbol: String!): String!
     }
 
     "User is a someone who hold the wallet"

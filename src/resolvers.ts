@@ -58,14 +58,22 @@ export const resolvers: Resolvers = {
         venusProtocol: async (_, __, ctx: CustomResolversContext) => {
             return {
                 supportTokens: await ctx.dataSources.venusAPI.getSupportTokens()
-            }
+            };
         },
 
         forTubeProtocol: async (_, __, ctx: CustomResolversContext) => {
             return {
                 supportTokens: await ctx.dataSources.forTubeAPI.getSupportTokens()
-            }
+            };
         },
+
+        logoURI: async (_, { symbol }, ctx: CustomResolversContext) => {
+            return ctx.dataSources.trustWalletAPI.getLogoURI(symbol.toUpperCase());
+        },
+
+        // logoURI: async (_, { (symbol: string) }, ctx: CustomResolversContext) => {
+        //     return ctx.dataSources.trustWalletAPI.getLogoURI(symbol.toUpperCase());
+        // },
     },
 
     VenusToken: {

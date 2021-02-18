@@ -21,6 +21,7 @@ export type Query = {
   cream?: Maybe<CreamFinanceProtocol>;
   venusProtocol?: Maybe<VenusProtocol>;
   forTubeProtocol?: Maybe<ForTubeProtocol>;
+  logoURI: Scalars['String'];
 };
 
 
@@ -31,6 +32,11 @@ export type QueryUserArgs = {
 
 export type QueryVenusArgs = {
   address: Scalars['ID'];
+};
+
+
+export type QueryLogoUriArgs = {
+  symbol: Scalars['String'];
 };
 
 /** User is a someone who hold the wallet */
@@ -254,9 +260,9 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   User: ResolverTypeWrapper<User>;
   Token: ResolversTypes['Currency'] | ResolversTypes['VenusToken'] | ResolversTypes['ForTubeToken'];
-  String: ResolverTypeWrapper<Scalars['String']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Currency: ResolverTypeWrapper<Currency>;
   VenusToken: ResolverTypeWrapper<VenusToken>;
@@ -274,9 +280,9 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Query: {};
   ID: Scalars['ID'];
+  String: Scalars['String'];
   User: User;
   Token: ResolversParentTypes['Currency'] | ResolversParentTypes['VenusToken'] | ResolversParentTypes['ForTubeToken'];
-  String: Scalars['String'];
   Int: Scalars['Int'];
   Currency: Currency;
   VenusToken: VenusToken;
@@ -296,6 +302,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   cream?: Resolver<Maybe<ResolversTypes['CreamFinanceProtocol']>, ParentType, ContextType>;
   venusProtocol?: Resolver<Maybe<ResolversTypes['VenusProtocol']>, ParentType, ContextType>;
   forTubeProtocol?: Resolver<Maybe<ResolversTypes['ForTubeProtocol']>, ParentType, ContextType>;
+  logoURI?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<QueryLogoUriArgs, 'symbol'>>;
 }>;
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
