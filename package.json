@@ -20,7 +20,7 @@
     "apollo-server-caching": "^0.5.3",
     "bignumber.js": "^9.0.1",
     "cross-fetch": "^3.0.6",
-    "ethers": "^5.0.31",
+    "ethers": "^5.8.0",
     "fp-ts": "^2.9.5",
     "graphql": "^15.5.0",
     "lodash": "^4.17.20",
